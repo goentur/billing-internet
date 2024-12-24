@@ -29,3 +29,10 @@ php artisan migrate --seed
 ```bash
 composer run dev
 ```
+
+LOGIN
+
+email : dev@mail.com
+
+password : a
+
