@@ -1,32 +1,119 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import InfoPassword from "@/Components/ui/info-password";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Loader2, Save } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
+
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+    const { setData, post, processing, errors } = useForm({
+        name: null,
+        email: null,
+        password: null,
+        password_confirmation: null,
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+        post(route('register'));
     };
 
     return (
         <GuestLayout>
-            <Head title="Register" />
-
-            <form onSubmit={submit}>
+            <Head title="Registrasi" />
+            <div className="flex flex-col gap-6">
+                <Card>
+                    <CardHeader className="text-center">
+                        <CardTitle className="text-xl">Registrasi</CardTitle>
+                            <CardDescription>
+                                Silahkan masukan data diri Anda
+                            </CardDescription>
+                        </CardHeader>
+                    <CardContent>
+                        <form onSubmit={submit} method="post">
+                            <div className="grid gap-6">
+                                <div className="grid gap-6">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="name" className={errors.name && "text-red-500"}>Nama</Label>
+                                        <Input
+                                            id="name"
+                                            name="name"
+                                            type="text"
+                                            className={errors.name && "border-red-500"}
+                                            placeholder="Masukan nama"
+                                            autoFocus={true}
+                                            onChange={(e) => setData('name', e.target.value)}
+                                            autoComplete="off"
+                                            required
+                                        />
+                                        {errors.name && <div className="text-red-500 text-xs mt-0">{errors.name}</div>}
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="email" className={errors.email && "text-red-500"}>Email</Label>
+                                        <Input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            className={errors.email && "border-red-500"}
+                                            placeholder="Masukan email"
+                                            autoComplete="username"
+                                            onChange={(e) => setData('email', e.target.value)}
+                                            required
+                                        />
+                                        {errors.email && <div className="text-red-500 text-xs mt-0">{errors.email}</div>}
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="password" className={errors.password && "text-red-500"}>Password</Label>
+                                        <Input 
+                                            id="password"
+                                            name="password"
+                                            type="password"
+                                            placeholder="Masukan password"
+                                            onChange={(e) => setData('password', e.target.value)}
+                                            autoComplete="off"
+                                            required
+                                        />
+                                        {errors.password && <div className="text-red-500 text-xs mt-0">{errors.password}</div>}
+                                        <InfoPassword/>
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="password_confirmation">Konfirmasi Password</Label>
+                                        <Input 
+                                            id="password_confirmation"
+                                            name="password_confirmation"
+                                            type="password"
+                                            placeholder="Ulangi password"
+                                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                                            autoComplete="off"
+                                            required
+                                        />
+                                    </div>
+                                    <Button type="submit" disabled={processing} className="w-full">
+                                        {processing ? <Loader2 className="animate-spin" /> : <Save/>} Daftar
+                                    </Button>
+                                </div>
+                                <div className="text-center text-sm">
+                                    Sudah punya akun?<Link href={route('login')} className="underline ms-1 underline-offset-4">Login</Link>
+                                </div>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
+                <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
+                    Dengan mengklik daftar, Anda menyetujui <a href="#">Terms of Service</a> dan <a href="#">Privacy Policy</a> kami.
+                </div>
+            </div>
+            {/* <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
 
@@ -115,7 +202,7 @@ export default function Register() {
                         Register
                     </PrimaryButton>
                 </div>
-            </form>
+            </form> */}
         </GuestLayout>
     );
 }

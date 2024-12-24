@@ -1,9 +1,17 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import InfoPassword from "@/Components/ui/info-password";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import { Loader2, Save } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 export default function ResetPassword({
@@ -13,7 +21,7 @@ export default function ResetPassword({
     token: string;
     email: string;
 }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { setData, post, processing, errors, reset } = useForm({
         token: token,
         email: email,
         password: '',
@@ -22,79 +30,56 @@ export default function ResetPassword({
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
-        post(route('password.store'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+        post(route('password.store'));
     };
 
     return (
         <GuestLayout>
             <Head title="Reset Password" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Reset Password
-                    </PrimaryButton>
-                </div>
-            </form>
+            <Card>
+                <CardHeader className="text-center">
+                    <CardTitle className="text-xl">Reset Password</CardTitle>
+                    <CardDescription>
+                        Silahkan masukan password Anda yang baru
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={submit} method="post">
+                        <div className="grid gap-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="password" className={errors.password && "text-red-500"}>Password</Label>
+                                <Input 
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Masukan password"
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    autoComplete="off"
+                                    required
+                                />
+                                {errors.password && <div className="text-red-500 text-xs mt-0">{errors.password}</div>}
+                                <InfoPassword/>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="password_confirmation">Konfirmasi Password</Label>
+                                <Input 
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    placeholder="Ulangi password"
+                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                    autoComplete="off"
+                                    required
+                                />
+                            </div>
+                            <Button type="submit" disabled={processing} className="w-full">
+                                {processing ? <Loader2 className="animate-spin" /> : <Save/>} Simpan
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </GuestLayout>
     );
 }

@@ -1,9 +1,14 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardHeader
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import { Loader2, Send } from "lucide-react";
 import { FormEventHandler } from 'react';
 
 export default function ConfirmPassword() {
@@ -21,36 +26,34 @@ export default function ConfirmPassword() {
 
     return (
         <GuestLayout>
-            <Head title="Confirm Password" />
-
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                This is a secure area of the application. Please confirm your
-                password before continuing.
-            </div>
-
-            <form onSubmit={submit}>
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Confirm
-                    </PrimaryButton>
-                </div>
-            </form>
+            <Head title="Konfirmasi Password" />
+            <Card>
+                <CardHeader className="text-justify text-sm">
+                    Ini adalah area aplikasi yang aman. Harap konfirmasi password Anda sebelum melanjutkan.
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={submit} method="post">
+                        <div className="grid gap-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="password" className={errors.password && "text-red-500"}>Password</Label>
+                                <Input 
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Masukan password"
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    autoComplete="off"
+                                    required
+                                />
+                                {errors.password && <div className="text-red-500 text-xs mt-0">{errors.password}</div>}
+                            </div>
+                            <Button type="submit" disabled={processing} className="w-full">
+                                {processing ? <Loader2 className="animate-spin" /> : <Send/>} Konfirmasi
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </GuestLayout>
     );
 }
