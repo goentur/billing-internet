@@ -16,13 +16,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Role::create(['name' => 'DEVELOPER']);
+        $developer = Role::create(['name' => 'DEVELOPER']);
 
         $userDeveloper = User::factory()->create([
-            'email' => 'dev@mail.com',
+            'email' => 'dev@abata.web.id',
             'name' => 'Developer',
             'password' => bcrypt('a')
         ]);
-        $userDeveloper->assignRole('DEVELOPER');
+        $userDeveloper->assignRole($developer);
     }
 }

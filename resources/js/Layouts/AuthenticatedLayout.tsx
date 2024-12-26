@@ -1,25 +1,30 @@
 
 import { AppSidebar } from "@/components/app-sidebar";
 import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
-    SidebarInset,
-    SidebarProvider,
-    SidebarTrigger,
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { PropsWithChildren, ReactNode } from 'react';
+import { Link } from "@inertiajs/react";
+import { PropsWithChildren, ReactNode, useEffect } from 'react';
 
 export default function Authenticated({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
+  useEffect(() => {
+      const savedMode = localStorage.getItem("theme");
+      const isDarkMode = savedMode !== "light"; // Default to dark if no value exists
+      document.documentElement.classList.toggle("dark", isDarkMode);
+  }, []);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -30,10 +35,10 @@ export default function Authenticated({
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
+                <BreadcrumbItem className="hidden md:block font-semibold">
+                  <Link href={route('dashboard')}>
                     Home
-                  </BreadcrumbLink>
+                  </Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

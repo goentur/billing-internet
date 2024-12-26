@@ -19,7 +19,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { usePage } from "@inertiajs/react"
+import { Link, usePage } from "@inertiajs/react"
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 
@@ -123,12 +123,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		],
 	}
 	return (
-	<Sidebar variant="inset" {...props} className="sidebar-scrollbar">
+	<Sidebar variant="inset" {...props}>
 		<SidebarHeader>
 			<SidebarMenu>
 				<SidebarMenuItem>
 					<SidebarMenuButton size="lg" asChild>
-					<a href="#">
+					<Link href={route('dashboard')}>
 						<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
 						<Globe className="size-4" />
 						</div>
@@ -136,7 +136,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							<span className="truncate font-semibold">{appName}</span>
 							<span className="truncate text-xs">NAMA PERUSAHAAN</span>
 						</div>
-					</a>
+					</Link>
 					</SidebarMenuButton>
 				</SidebarMenuItem>
 			</SidebarMenu>

@@ -81,8 +81,30 @@
   }
 }
 @layer utilities {
+  /* Scrollbar width */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 9px; /* Full rounded */
+    background-color: theme('colors.gray.600'); /* Medium gray */
+  }
+
+  /* Dark mode support */
+  .dark ::-webkit-scrollbar-track {
+    background-color: theme('colors.neutral.900'); /* Darker track for dark mode */
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: theme('colors.neutral.300'); /* Medium gray thumb for dark mode */
+  }
+
+  /* Example for specific class usage (e.g., .sidebar-scrollbar) */
   .sidebar-scrollbar::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
+    width: 0; /* Hide scrollbar */
+    height: 0;
   }
 }

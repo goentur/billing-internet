@@ -1,4 +1,3 @@
-import React from "react";
 import { AvatarFallback } from "./avatar";
 
 const ShortName = ({ name }) => {

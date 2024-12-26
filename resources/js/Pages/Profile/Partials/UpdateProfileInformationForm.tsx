@@ -7,7 +7,6 @@ import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { AlertCircle, Loader2, Save, Send } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import DeleteUserForm from './DeleteUserForm';
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,
@@ -23,7 +22,6 @@ export default function UpdateProfileInformation({
             name: user.name,
             email: user.email,
         });
-
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -57,7 +55,6 @@ export default function UpdateProfileInformation({
                         {errors.name && <div className="text-red-500 text-xs mt-0">{errors.name}</div>}
                     </div>
                     {mustVerifyEmail && user.email_verified_at === null && (
-                        
                         <Alert variant="destructive">
                             <AlertCircle className="h-5 w-5" />
                             <AlertTitle className='text-lg'>Alamat email Anda belum diverifikasi.</AlertTitle>
@@ -92,7 +89,6 @@ export default function UpdateProfileInformation({
                     </div>
                 </form>
             </CardContent>
-            <DeleteUserForm/>
         </Card>
     );
 }

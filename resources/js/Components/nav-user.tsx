@@ -24,7 +24,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Link } from "@inertiajs/react"
-import ShortName from "./ui/ShortName"
+import ShortName from "./ui/sort-name"
 
 export function NavUser({
   user,
