@@ -77,12 +77,12 @@ export function NavUser({
               <Link href={route('profile.edit')}>
                 <DropdownMenuItem className="cursor-pointer">
                   <BadgeCheck />
-                  Account
+                  Akun
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem className="cursor-pointer">
                 <Bell />
-                Notifications
+                Notifikasi
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

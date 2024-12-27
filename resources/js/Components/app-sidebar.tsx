@@ -1,9 +1,15 @@
 import {
-	Bot,
+	Building,
+	FileCheck2,
+	FileMinus2,
 	Globe,
-	LifeBuoy,
-	Send,
-	SquareTerminal
+	HandCoins,
+	Key,
+	Package,
+	Timer,
+	UserCheck2,
+	UserRoundCog,
+	Users
 } from "lucide-react"
 import * as React from "react"
 
@@ -30,95 +36,84 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			name: user.name,
 			email: user.email,
 		},
-		navMain: [
+		menuMaster: [
 			{
-				title: "Playground",
+				title: "Zona Waktu",
 				url: "#",
-				icon: SquareTerminal,
-				isActive: true,
-				items: [
-					{
-						title: "History",
-						url: "dashboard",
-					},
-					{
-						title: "Starred",
-						url: "dashboard",
-					},
-					{
-						title: "Settings",
-						url: "dashboard",
-					},
-				],
+				icon: Timer,
+				permission: 'index-zona-waktu',
 			},
 			{
-				title: "Models",
+				title: "Perusahaan",
 				url: "#",
-				icon: Bot,
-				items: [
-					{
-						title: "Genesis",
-						url: "dashboard",
-					},
-					{
-						title: "Explorer",
-						url: "dashboard",
-					},
-					{
-						title: "Quantum",
-						url: "dashboard",
-					},
-				],
+				icon: Building,
+				permission: 'index-perusahaan',
 			},
 			{
-				title: "Models",
+				title: "Paket Internet",
 				url: "#",
-				icon: Bot,
-				items: [
-					{
-						title: "Genesis",
-						url: "dashboard",
-					},
-					{
-						title: "Explorer",
-						url: "dashboard",
-					},
-					{
-						title: "Quantum",
-						url: "dashboard",
-					},
-				],
+				icon: Package,
+				permission: 'index-paket-internet',
 			},
 			{
-				title: "Models",
+				title: "Pelanggan",
 				url: "#",
-				icon: Bot,
-				items: [
-					{
-						title: "Genesis",
-						url: "dashboard",
-					},
-					{
-						title: "Explorer",
-						url: "dashboard",
-					},
-					{
-						title: "Quantum",
-						url: "dashboard",
-					},
-				],
+				icon: Users,
+				permission: 'index-pelanggan',
+			},
+			{
+				title: "Pemilik",
+				url: "#",
+				icon: UserCheck2,
+				permission: 'index-pemilik',
+			},
+			{
+				title: "Pegawai",
+				url: "#",
+				icon: UserCheck2,
+				permission: 'index-pegawai',
+			},
+		],
+		menuTransaksi: [
+			{
+				title: "Pembayaran",
+				url: "#",
+				icon: HandCoins,
+				permission: 'index-pembayaran',
+			},
+		],
+		menuLaporan: [
+			{
+				title: "Pembayaran",
+				url: "#",
+				icon: FileCheck2,
+				permission: 'index-laporan-pembayaran',
+			},
+			{
+				title: "Tunggakan",
+				url: "#",
+				icon: FileMinus2,
+				permission: 'index-laporan-tunggakan',
 			},
 		],
 		navSecondary: [
 			{
-				title: "Support",
+				title: "Pengguna",
 				url: "#",
-				icon: LifeBuoy,
+				icon: UserCheck2,
+				permission: 'index-pengguna',
 			},
 			{
-				title: "Feedback",
+				title: "Role",
 				url: "#",
-				icon: Send,
+				icon: UserRoundCog,
+				permission: 'index-role',
+			},
+			{
+				title: "Permission",
+				url: "#",
+				icon: Key,
+				permission: 'index-permission',
 			},
 		],
 	}
@@ -142,7 +137,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarMenu>
 		</SidebarHeader>
 		<SidebarContent className="sidebar-scrollbar">
-			<NavMain items={data.navMain} />
+			<NavMain items={data.menuMaster} title={'Master'} />
+			<NavMain items={data.menuTransaksi} title={'Transaksi'} />
+			<NavMain items={data.menuLaporan} title={'Laporan'} />
 			<NavSecondary items={data.navSecondary} className="mt-auto" />
 		</SidebarContent>
 		<SidebarFooter>

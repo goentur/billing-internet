@@ -21,7 +21,7 @@ import {
 import { Link } from "@inertiajs/react"
 
 export function NavMain({
-  items,
+  items,title,
 }: {
   items: {
     title: string
@@ -32,11 +32,11 @@ export function NavMain({
       title: string
       url: string
     }[]
-  }[]
+  }, title : string[]
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Menu</SidebarGroupLabel>
+      <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
@@ -73,15 +73,6 @@ export function NavMain({
             </SidebarMenuItem>
           </Collapsible>
         ))}
-        
-        <SidebarMenuItem>
-          <Link href={route('dashboard')}>
-            <SidebarMenuButton>
-              <Home />
-              <span>More</span>
-            </SidebarMenuButton>
-          </Link>
-        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
   )
