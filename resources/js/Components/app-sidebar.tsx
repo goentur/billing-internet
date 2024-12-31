@@ -28,9 +28,8 @@ import {
 import { Link, usePage } from "@inertiajs/react"
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-	const user = usePage().props.auth.user;
+	const {user, permissions} = usePage().props.auth;
 	const data = {
 		user: {
 			name: user.name,
@@ -39,37 +38,37 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		menuMaster: [
 			{
 				title: "Zona Waktu",
-				url: "#",
+				url: "master.zona-waktu.index",
 				icon: Timer,
 				permission: 'index-zona-waktu',
 			},
 			{
 				title: "Perusahaan",
-				url: "#",
+				url: "dashboard",
 				icon: Building,
 				permission: 'index-perusahaan',
 			},
 			{
 				title: "Paket Internet",
-				url: "#",
+				url: "dashboard",
 				icon: Package,
 				permission: 'index-paket-internet',
 			},
 			{
 				title: "Pelanggan",
-				url: "#",
+				url: "dashboard",
 				icon: Users,
 				permission: 'index-pelanggan',
 			},
 			{
 				title: "Pemilik",
-				url: "#",
+				url: "dashboard",
 				icon: UserCheck2,
 				permission: 'index-pemilik',
 			},
 			{
 				title: "Pegawai",
-				url: "#",
+				url: "dashboard",
 				icon: UserCheck2,
 				permission: 'index-pegawai',
 			},
@@ -77,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		menuTransaksi: [
 			{
 				title: "Pembayaran",
-				url: "#",
+				url: "dashboard",
 				icon: HandCoins,
 				permission: 'index-pembayaran',
 			},
@@ -85,33 +84,33 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		menuLaporan: [
 			{
 				title: "Pembayaran",
-				url: "#",
+				url: "dashboard",
 				icon: FileCheck2,
 				permission: 'index-laporan-pembayaran',
 			},
 			{
-				title: "Tunggakan",
-				url: "#",
+				title: "Piutang",
+				url: "dashboard",
 				icon: FileMinus2,
-				permission: 'index-laporan-tunggakan',
+				permission: 'index-laporan-piutang',
 			},
 		],
 		navSecondary: [
 			{
 				title: "Pengguna",
-				url: "#",
+				url: "dashboard",
 				icon: UserCheck2,
 				permission: 'index-pengguna',
 			},
 			{
 				title: "Role",
-				url: "#",
+				url: "dashboard",
 				icon: UserRoundCog,
 				permission: 'index-role',
 			},
 			{
 				title: "Permission",
-				url: "#",
+				url: "dashboard",
 				icon: Key,
 				permission: 'index-permission',
 			},
@@ -137,9 +136,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarMenu>
 		</SidebarHeader>
 		<SidebarContent className="sidebar-scrollbar">
-			<NavMain items={data.menuMaster} title={'Master'} />
-			<NavMain items={data.menuTransaksi} title={'Transaksi'} />
-			<NavMain items={data.menuLaporan} title={'Laporan'} />
+			<NavMain items={data.menuMaster} title={'Master'} permissions={permissions} />
+			<NavMain items={data.menuTransaksi} title={'Transaksi'} permissions={permissions} />
+			<NavMain items={data.menuLaporan} title={'Laporan'} permissions={permissions} />
 			<NavSecondary items={data.navSecondary} className="mt-auto" />
 		</SidebarContent>
 		<SidebarFooter>

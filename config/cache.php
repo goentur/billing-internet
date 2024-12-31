@@ -105,4 +105,25 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cache Lifetime
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the number of seconds that you wish the cache
+    | to be allowed to remains before it expires. If you want them
+    | to immediately expire on the browser closing, set that option.
+    |
+    */
+
+    'lifetime' => [
+        'minute' => ((bool) env('APP_DEBUG', false)) ? env('CACHE_DEBUG_LIFETIME', 0) : 60,
+        'hour' => ((bool) env('APP_DEBUG', false)) ? env('CACHE_DEBUG_LIFETIME', 0) : 60 * 60,
+        'day' => ((bool) env('APP_DEBUG', false)) ? env('CACHE_DEBUG_LIFETIME', 0) : 60 * 60 * 24,
+
+        'm3' => ((bool) env('APP_DEBUG', false)) ? env('CACHE_DEBUG_LIFETIME', 0) : 60 * 3,
+        'm5' => ((bool) env('APP_DEBUG', false)) ? env('CACHE_DEBUG_LIFETIME', 0) : 60 * 5,
+        'm10' => ((bool) env('APP_DEBUG', false)) ? env('CACHE_DEBUG_LIFETIME', 0) : 60 * 10,
+        'm30' => ((bool) env('APP_DEBUG', false)) ? env('CACHE_DEBUG_LIFETIME', 0) : 60 * 30,
+    ],
 ];

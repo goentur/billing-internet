@@ -1,5 +1,3 @@
-"use client"
-
 import { ChevronRight, Home, type LucideIcon } from "lucide-react"
 
 import {
@@ -21,7 +19,7 @@ import {
 import { Link } from "@inertiajs/react"
 
 export function NavMain({
-  items,title,
+  items,title,permissions
 }: {
   items: {
     title: string
@@ -32,20 +30,24 @@ export function NavMain({
       title: string
       url: string
     }[]
-  }, title : string[]
+  },
+  title : string[],
+  permissions : string[],
 }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
+        {items.filter((item) =>
+          permissions.some((p) => item.permission.includes(p))
+        ).map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+                <Link href={route(item.url)}>
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
