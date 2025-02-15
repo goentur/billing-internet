@@ -1,5 +1,5 @@
-import * as React from "react"
 import { type LucideIcon } from "lucide-react"
+import * as React from "react"
 
 import {
   SidebarGroup,
@@ -7,29 +7,35 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/Components/ui/sidebar"
+import { Link } from "@inertiajs/react"
 
 export function NavSecondary({
   items,
+  permissions,
   ...props
 }: {
   items: {
     title: string
     url: string
     icon: LucideIcon
-  }[]
+    permission: string
+  }[],
+  permissions : string[],
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
-          {items.map((item) => (
+          {items.filter((item) =>
+          permissions.some((p) => item.permission.includes(p))
+        ).map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild size="sm">
-                <a href={item.url}>
+                <Link href={route(item.url)}>
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

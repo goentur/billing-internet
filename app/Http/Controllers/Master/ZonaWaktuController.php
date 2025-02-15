@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Master\ZonaWaktu\StoreZonaWaktu;
+use App\Http\Requests\Master\ZonaWaktu\UpdateZonaWaktu;
 use App\Models\ZonaWaktu;
+use App\Repositories\Master\ZonaWaktuRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -11,12 +14,18 @@ use Illuminate\Support\Facades\Cache;
 
 class ZonaWaktuController extends Controller implements HasMiddleware
 {
+    protected ZonaWaktuRepository $repository;
+
+    public function __construct(ZonaWaktuRepository $repository)
+    {
+        $this->repository = $repository;
+    }
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index-zona-waktu', only: ['index', 'show']),
-            new Middleware('can:create-zona-waktu', only: ['create', 'store']),
-            new Middleware('can:update-zona-waktu', only: ['edit', 'update']),
+            new Middleware('can:index-zona-waktu', only: ['index', 'data']),
+            new Middleware('can:create-zona-waktu', only: ['store']),
+            new Middleware('can:update-zona-waktu', only: ['update']),
             new Middleware('can:delete-zona-waktu', only: ['destroy'])
         ];
     }
@@ -45,39 +54,41 @@ class ZonaWaktuController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        //
+        abort(404);
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreZonaWaktu $request)
     {
-        //
+        $this->repository->store($request->all());
+        back()->with('success', 'Data berhasil ditambahkan');
     }
-
+    
     /**
      * Display the specified resource.
      */
     public function show(ZonaWaktu $zonaWaktu)
     {
-        //
+        abort(404);
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ZonaWaktu $zonaWaktu)
+    public function edit(ZonaWaktuRepository $repository)
     {
-        //
+        abort(404);
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ZonaWaktu $zonaWaktu)
+    public function update(UpdateZonaWaktu $request, ZonaWaktu $zonaWaktu)
     {
-        //
+        $this->repository->update($zonaWaktu->id, $request->all());
+        back()->with('success', 'Data berhasil diubah');
     }
 
     /**
@@ -85,6 +96,31 @@ class ZonaWaktuController extends Controller implements HasMiddleware
      */
     public function destroy(ZonaWaktu $zonaWaktu)
     {
-        //
+        $this->repository->delete($zonaWaktu->id);
+        back()->with('success', 'Data berhasil dihapus');
+    }
+
+    /**
+     * Resource from storage.
+     */
+    public function data(Request $request)
+    {
+        return response()->json($this->repository->data($request), 200);
+    }
+
+    /**
+     * All resource from storage.
+     */
+    public function allData()
+    {
+        return response()->json(
+            $this->repository->allData()->map(function ($item) {
+                return [
+                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
+                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
+                ];
+            }),
+            200
+        );
     }
 }

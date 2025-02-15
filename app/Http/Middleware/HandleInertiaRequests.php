@@ -35,6 +35,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'permissions' => $request->user()?->roles['0']->permissions->pluck('name'),
             ],
+            'flash' => [
+                'error' => fn() => $request->session()->get('error'),
+                'success' => fn() => $request->session()->get('success'),
+            ],
         ];
     }
 }

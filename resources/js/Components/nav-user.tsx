@@ -7,7 +7,7 @@ import {
 
 import {
   Avatar
-} from "@/components/ui/avatar"
+} from "@/Components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,13 +16,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/Components/ui/dropdown-menu"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/Components/ui/sidebar"
 import { Link } from "@inertiajs/react"
 import ShortName from "./ui/sort-name"
 

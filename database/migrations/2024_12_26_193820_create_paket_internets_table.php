@@ -15,8 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('perusahaan_id')->nullable()->comment('id perusahaan');
             $table->string('nama')->nullable();
-            $table->string('singkatan')->nullable();
-            $table->bigInteger('gmt_offset')->nullable();
+            $table->string('harga')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

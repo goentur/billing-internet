@@ -13,9 +13,9 @@ import {
 } from "lucide-react"
 import * as React from "react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/Components/nav-main"
+import { NavSecondary } from "@/Components/nav-secondary"
+import { NavUser } from "@/Components/nav-user"
 import {
 	Sidebar,
 	SidebarContent,
@@ -24,7 +24,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/Components/ui/sidebar"
 import { Link, usePage } from "@inertiajs/react"
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -44,13 +44,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			},
 			{
 				title: "Perusahaan",
-				url: "dashboard",
+				url: "master.perusahaan.index",
 				icon: Building,
 				permission: 'index-perusahaan',
 			},
 			{
 				title: "Paket Internet",
-				url: "dashboard",
+				url: "master.paket-internet.index",
 				icon: Package,
 				permission: 'index-paket-internet',
 			},
@@ -62,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			},
 			{
 				title: "Pemilik",
-				url: "dashboard",
+				url: "master.pemilik.index",
 				icon: UserCheck2,
 				permission: 'index-pemilik',
 			},
@@ -98,19 +98,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		navSecondary: [
 			{
 				title: "Pengguna",
-				url: "dashboard",
+				url: "pengaturan.pengguna.index",
 				icon: UserCheck2,
 				permission: 'index-pengguna',
 			},
 			{
 				title: "Role",
-				url: "dashboard",
+				url: "pengaturan.role.index",
 				icon: UserRoundCog,
 				permission: 'index-role',
 			},
 			{
 				title: "Permission",
-				url: "dashboard",
+				url: "pengaturan.permission.index",
 				icon: Key,
 				permission: 'index-permission',
 			},
@@ -139,7 +139,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			<NavMain items={data.menuMaster} title={'Master'} permissions={permissions} />
 			<NavMain items={data.menuTransaksi} title={'Transaksi'} permissions={permissions} />
 			<NavMain items={data.menuLaporan} title={'Laporan'} permissions={permissions} />
-			<NavSecondary items={data.navSecondary} className="mt-auto" />
+			<NavSecondary items={data.navSecondary} permissions={permissions} className="mt-auto" />
 		</SidebarContent>
 		<SidebarFooter>
 			<NavUser user={data.user} />

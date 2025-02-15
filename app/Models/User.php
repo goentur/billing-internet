@@ -21,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var list<string>
      */
     protected $fillable = [
+        'zona_waktu_id',
         'name',
         'email',
         'password',
@@ -47,5 +48,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function perusahaan()
+    {
+        return $this->belongsToMany(Perusahaan::class, UserPerusahaan::class);
+    }
+    public function zonaWaktu()
+    {
+        return $this->belongsTo(ZonaWaktu::class);
     }
 }

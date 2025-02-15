@@ -13,6 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Toaster } from "@/Components/ui/toaster";
 import { Link } from "@inertiajs/react";
 import { PropsWithChildren, ReactNode, useEffect } from 'react';
 
@@ -52,6 +53,7 @@ export default function Authenticated({
             {children}
         </div>
       </SidebarInset>
+      <Toaster/>
     </SidebarProvider>
   )
 }

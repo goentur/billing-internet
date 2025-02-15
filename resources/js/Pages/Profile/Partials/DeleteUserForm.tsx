@@ -81,7 +81,7 @@ export default function DeleteUserForm() {
                                         ref={passwordInput}
                                         value={data.password}
                                         type="password"
-                                        placeholder="Masukan password baru"
+                                        placeholder="Masukan password"
                                         onChange={(e) => setData('password', e.target.value)}
                                         autoComplete="off"
                                         required
