@@ -24,6 +24,7 @@ class UpdatePerusahaan extends FormRequest
         return [
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
+            'koordinat' => 'required|string|max:255',
         ];
     }
 }

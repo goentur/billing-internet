@@ -13,7 +13,7 @@ class PerusahaanRepository extends BaseRepository
     }
     public function allData()
     {
-        return $this->model::select('id', 'nama')->get();
+        return $this->model::select('id', 'nama', 'koordinat')->get();
     }
     public function data($request)
     {

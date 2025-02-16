@@ -31,12 +31,18 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $authData = Cache::remember(__CLASS__ . '\\' . $request->user()?->id, config('cache.lifetime.hour '), function () use ($request) {
+            $user = $request->user();
+            $perusahaan = $user?->perusahaan[0] ?? null;
+            $koordinat = $perusahaan?->koordinat
+                ? array_reverse(explode(", ", $perusahaan->koordinat))
+                : [109.52646521589804, -7.01800386097385];
             return [
-                'user' => $request->user(),
-                'permissions' => $request->user()?->roles[0]->permissions->pluck('name'),
+                'user' => $user,
+                'permissions' => $user?->roles[0]->permissions->pluck('name'),
                 'perusahaan' => [
-                    'id' => $request->user()?->perusahaan[0]?->id ?? time(),
-                    'nama' => $request->user()?->perusahaan[0]?->nama ?? 'DEVELOPER ABATA TECH',
+                    'id' => $perusahaan?->id ?? time(),
+                    'nama' => $perusahaan?->nama ?? 'DEVELOPER ABATA TECH',
+                    'koordinat' => $koordinat,
                 ],
             ];
         });

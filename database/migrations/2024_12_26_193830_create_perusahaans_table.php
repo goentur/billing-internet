@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama')->nullable();
             $table->string('logo')->nullable();
             $table->string('alamat')->nullable();
+            $table->string('koordinat')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -46,6 +46,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::middleware('can:odp-index')->post('data', [OdpController::class, 'data'])->name('data');
             Route::post('all-data', [OdpController::class, 'allData'])->name('all-data');
         });
+        Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
+            Route::middleware('can:pelanggan-index')->post('data', [PelangganController::class, 'data'])->name('data');
+        });
         Route::prefix('pegawai')->name('pegawai.')->group(function () {
             Route::middleware('can:pegawai-index')->post('data', [PegawaiController::class, 'data'])->name('data');
         });

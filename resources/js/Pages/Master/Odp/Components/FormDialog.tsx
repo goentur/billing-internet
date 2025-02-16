@@ -1,4 +1,4 @@
-import { Button } from '@/Components/ui/button';
+import { Button } from "@/Components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -7,10 +7,10 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/Components/ui/dialog";
-import { Input } from '@/Components/ui/input';
+import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import clsx from "clsx";
-import { Loader2, Save } from 'lucide-react';
+import { Loader2, Save } from "lucide-react";
 type FormDialogProps = {
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -50,7 +50,7 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                             {errors.nama && <div className="text-red-500 text-xs mt-0">{errors.nama}</div>}
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="alamat" className={clsx({ "text-red-500": errors.alamat }, "capitalize")}>alamat</Label>
+                            <Label htmlFor="alamat" className={clsx({ "text-red-500": errors.alamat }, "capitalize")}>Alamat</Label>
                             <Input
                                 id="alamat"
                                 name="alamat"
@@ -61,29 +61,11 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                                 }}
                                 type="text"
                                 value={data.alamat}
-                                placeholder="Masukan alamat"
+                                placeholder="Masukkan alamat"
                                 onChange={(e) => setData((prevData:any) => ({ ...prevData, alamat: e.target.value }))}
                                 required
                             />
                             {errors.alamat && <div className="text-red-500 text-xs mt-0">{errors.alamat}</div>}
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="koordinat" className={clsx({ "text-red-500": errors.koordinat }, "capitalize")}>koordinat</Label>
-                            <Input
-                                id="koordinat"
-                                name="koordinat"
-                                ref={(el) => {
-                                    if (formRefs.current) {
-                                        formRefs.current["koordinat"] = el;
-                                    }
-                                }}
-                                type="text"
-                                value={data.koordinat}
-                                placeholder="Masukan koordinat"
-                                onChange={(e) => setData((prevData:any) => ({ ...prevData, koordinat: e.target.value }))}
-                                required
-                            />
-                            {errors.koordinat && <div className="text-red-500 text-xs mt-0">{errors.koordinat}</div>}
                         </div>
                     </DialogDescription>
                     <DialogFooter>

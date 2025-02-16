@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('odp_id')->nullable()->comment('id odp');
             $table->uuid('perusahaan_id')->nullable()->comment('id perusahaan');
             $table->uuid('paket_internet_id')->nullable()->comment('id paket internet');
-            $table->tinyInteger('tanggal_bayar')->nullable();
             $table->string('nama')->nullable();
+            $table->tinyInteger('tanggal_bayar')->nullable();
             $table->string('telp')->nullable();
             $table->text('alamat')->nullable();
             $table->softDeletes();

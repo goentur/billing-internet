@@ -29,6 +29,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                     <th className="p-2 border w-[1px]">NO</th>
                     <th className="p-2 border">Nama</th>
                     <th className="p-2 border">Alamat</th>
+                    <th className="p-2 border">Koordinat</th>
                     <th className="p-2 border w-1">Aksi</th>
                 </tr>
             </thead>
@@ -43,16 +44,16 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                     </tr>
                 ):
                 dataTable.length > 0 ? dataTable.map((value : any,index:number) => (
-                    
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-900">
                     <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                     <td className="px-2 py-1 border">{value.nama}</td>
                     <td className="px-2 py-1 border">{value.alamat}</td>
+                    <td className="px-2 py-1 border">{value.koordinat}</td>
                     <td className="border text-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, nama:value.nama, alamat:value.alamat})}}><Pencil/> Ubah</DropdownMenuItem>}
+                                {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, nama:value.nama, alamat:value.alamat, koordinat:value.koordinat})}}><Pencil/> Ubah</DropdownMenuItem>}
                                 {gate.delete && <DropdownMenuItem onClick={() => {setHapus(true), setData({id:value.id})}}><BadgeX/> Hapus</DropdownMenuItem>}
                             </DropdownMenuContent>
                         </DropdownMenu>
