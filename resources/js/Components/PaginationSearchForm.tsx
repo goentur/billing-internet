@@ -10,13 +10,18 @@ import {
 import { Plus } from 'lucide-react';
 
 type PaginationSearchFormProps = {
-  setDataInfo: React.Dispatch<React.SetStateAction<any>>;
-  setForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
-  reset: () => void;
+    gate: {
+        create : boolean,
+        update : boolean,
+        delete : boolean,
+    };  
+    setDataInfo: React.Dispatch<React.SetStateAction<any>>;
+    setForm: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
+    reset: () => void;
 };
 
-export default function PaginationSearchForm({setDataInfo,setForm,setIsEdit,reset} : PaginationSearchFormProps) {
+export default function PaginationSearchForm({gate,setDataInfo,setForm,setIsEdit,reset} : PaginationSearchFormProps) {
     return (
         <div className="mb-4">
             <div className="grid gap-4 lg:grid-cols-2">
@@ -43,7 +48,7 @@ export default function PaginationSearchForm({setDataInfo,setForm,setIsEdit,rese
                         required
                         onChange={(e) => setDataInfo((prev:any) => ({...prev, search:e.target.value, currentPage : 1}))}
                     />
-                    <Button type="button" variant="destructive" onClick={() => {reset(), setForm(true), setIsEdit(false)}}><Plus/> Tambah</Button>
+                    {gate.create && <Button type="button" variant="destructive" onClick={() => {reset(), setForm(true), setIsEdit(false)}}><Plus/> Tambah</Button>}
                 </form>
             </div>
         </div>

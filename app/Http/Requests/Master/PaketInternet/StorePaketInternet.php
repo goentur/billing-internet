@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Pengaturan\Role;
+namespace App\Http\Requests\Master\PaketInternet;
 
-use App\Models\Permission;
+use App\Models\Perusahaan;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateRole extends FormRequest
+class StorePaketInternet extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class UpdateRole extends FormRequest
     public function rules(): array
     {
         return [
-            'permissions' => 'required|array',
-            'permissions.*' => Rule::exists(Permission::class, 'uuid'),
+            'perusahaan' => 'required|string|uuid|' . Rule::exists(Perusahaan::class, 'id'),
+            'nama' => 'required|string|max:255',
+            'harga' => 'required|numeric',
         ];
     }
 }

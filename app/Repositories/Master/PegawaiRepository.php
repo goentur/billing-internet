@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class PemilikRepository
+class PegawaiRepository
 {
     public function __construct(protected User $model) {}
     private function applySearchFilter($request)
@@ -14,16 +14,16 @@ class PemilikRepository
         return fn($q) => $q->where(function ($query) use ($request) {
             $query->where('name', 'like', "%{$request->search}%")
                 ->orWhere('email', 'like', "%{$request->search}%")
-                ->orWhereHas('zonaWaktu', fn($q) => $q->where('nama', 'like', "%{$request->search}%"))
-                ->orWhereHas('perusahaan', fn($q) => $q->where('nama', 'like', "%{$request->search}%"));
+                ->orWhereHas('zonaWaktu', fn($q) => $q->where('nama', 'like', "%{$request->search}%"));
         });
     }
     public function data($request)
     {
         return $this->model::select('id', 'zona_waktu_id', 'name', 'email')
-            ->with(['zonaWaktu', 'perusahaan'])
+            ->with(['zonaWaktu'])
             ->when($request->search, $this->applySearchFilter($request))
-            ->whereHas('roles', fn($q) => $q->where('name', 'PEMILIK'))
+            ->whereHas('perusahaan', fn($q) => $q->where('id', $request->perusahaan))
+            ->whereHas('roles', fn($q) => $q->where('name', 'PEGAWAI'))
             ->latest()
             ->paginate($request->perPage ?? 25);
     }
@@ -37,7 +37,7 @@ class PemilikRepository
                 'name' => $request->nama,
                 'password' => Hash::make($request->password),
             ]);
-            $user->assignRole("PEMILIK");
+            $user->assignRole("PEGAWAI");
             $user->perusahaan()->sync($request->perusahaan);
             DB::commit();
         } catch (\Exception $e) {
@@ -55,7 +55,6 @@ class PemilikRepository
                 'email' => $request->email,
                 'name' => $request->nama,
             ]);
-            $user->perusahaan()->sync($request->perusahaan);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -64,6 +63,6 @@ class PemilikRepository
     }
     public function delete($id)
     {
-        return $this->model->findOrFail($id)?->delete();
+        return $this->model->find($id)?->delete();
     }
 }

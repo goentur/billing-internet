@@ -17,6 +17,7 @@ type FormDialogProps = {
     setOpen: (open: boolean) => void;
     judul: string;
     data: any; // Tipe data bisa disesuaikan sesuai dengan struktur data yang digunakan
+    isEdit: boolean;
     setData: (data: any) => void;
     errors: any; // Tipe data errors dapat disesuaikan dengan format error yang digunakan
     formRefs: React.RefObject<Record<string, HTMLInputElement | null>>;
@@ -24,8 +25,7 @@ type FormDialogProps = {
     simpanAtauUbah: (e: React.FormEvent) => void;
     dataPermissions: { value: string; label: string }[];
 };
-export default function FormDialog({open,setOpen,judul,data,setData,errors,formRefs,processing,simpanAtauUbah, dataPermissions}:FormDialogProps) {
-    console.log(data)
+export default function FormDialog({open,setOpen,judul,data,isEdit,setData,errors,formRefs,processing,simpanAtauUbah, dataPermissions}:FormDialogProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
@@ -48,6 +48,7 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                                 value={data.nama}
                                 placeholder="Masukkan nama"
                                 onChange={(e) => setData((prevData:any) => ({ ...prevData, nama: e.target.value }))}
+                                readOnly={isEdit}
                                 required
                             />
                             {errors.nama && <div className="text-red-500 text-xs mt-0">{errors.nama}</div>}

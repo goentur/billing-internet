@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('pelanggans', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('odp_id')->nullable()->comment('id odp');
             $table->uuid('perusahaan_id')->nullable()->comment('id perusahaan');
             $table->uuid('paket_internet_id')->nullable()->comment('id paket internet');
             $table->tinyInteger('tanggal_bayar')->nullable();

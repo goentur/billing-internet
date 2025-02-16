@@ -1,3 +1,4 @@
+import InputFormatUang from "@/Components/InputFormatUang";
 import { Button } from "@/Components/ui/button";
 import {
     Dialog,
@@ -50,40 +51,9 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                             {errors.nama && <div className="text-red-500 text-xs mt-0">{errors.nama}</div>}
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="singkatan" className={clsx({ "text-red-500": errors.singkatan }, "capitalize")}>singkatan</Label>
-                            <Input
-                                id="singkatan"
-                                name="singkatan"
-                                ref={(el) => {
-                                    if (formRefs.current) {
-                                        formRefs.current["singkatan"] = el;
-                                    }
-                                }}
-                                type="text"
-                                value={data.singkatan}
-                                placeholder="Masukan singkatan"
-                                onChange={(e) => setData((prevData:any) => ({ ...prevData, singkatan: e.target.value }))}
-                                required
-                            />
-                            {errors.singkatan && <div className="text-red-500 text-xs mt-0">{errors.singkatan}</div>}
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="gmt_offset" className={clsx({ "text-red-500": errors.gmt_offset }, "capitalize")}>gmt offset</Label>
-                            <Input
-                                id="gmt_offset"
-                                name="gmt_offset"
-                                ref={(el) => {
-                                    if (formRefs.current) {
-                                        formRefs.current["gmt_offset"] = el;
-                                    }
-                                }}
-                                type="text"
-                                value={data.gmt_offset}
-                                placeholder="Masukan gmt offset"
-                                onChange={(e) => setData((prevData:any) => ({ ...prevData, gmt_offset: e.target.value }))}
-                                required
-                            />
-                            {errors.gmt_offset && <div className="text-red-500 text-xs mt-0">{errors.gmt_offset}</div>}
+                            <Label htmlFor="harga" className={clsx({ "text-red-500": errors.harga }, "capitalize")}>harga</Label>
+                            <InputFormatUang data={data} setData={setData} formRefs={formRefs} />
+                            {errors.harga && <div className="text-red-500 text-xs mt-0">{errors.harga}</div>}
                         </div>
                     </DialogDescription>
                     <DialogFooter>

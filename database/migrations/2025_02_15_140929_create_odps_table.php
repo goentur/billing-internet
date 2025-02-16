@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paket_internets', function (Blueprint $table) {
+        Schema::create('odps', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('perusahaan_id')->nullable()->comment('id perusahaan');
             $table->string('nama')->nullable();
-            $table->bigInteger('harga')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('koordinat')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paket_internets');
+        Schema::dropIfExists('odps');
     }
 };

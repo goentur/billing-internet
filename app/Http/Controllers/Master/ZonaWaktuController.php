@@ -23,20 +23,20 @@ class ZonaWaktuController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index-zona-waktu', only: ['index', 'data']),
-            new Middleware('can:create-zona-waktu', only: ['store']),
-            new Middleware('can:update-zona-waktu', only: ['update']),
-            new Middleware('can:delete-zona-waktu', only: ['destroy'])
+            new Middleware('can:zona-waktu-index', only: ['index', 'data']),
+            new Middleware('can:zona-waktu-create', only: ['store']),
+            new Middleware('can:zona-waktu-update', only: ['update']),
+            new Middleware('can:zona-waktu-delete', only: ['destroy'])
         ];
     }
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
             return [
-                'create' => $user->can('create-zona-waktu'),
-                'update' => $user->can('update-zona-waktu'),
-                'delete' => $user->can('delete-zona-waktu'),
+                'create' => $user->can('zona-waktu-create'),
+                'update' => $user->can('zona-waktu-update'),
+                'delete' => $user->can('zona-waktu-delete'),
             ];
         });
     }
@@ -46,7 +46,8 @@ class ZonaWaktuController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        return inertia('Master/ZonaWaktu/Index');
+        $gate = $this->gate();
+        return inertia('Master/ZonaWaktu/Index', compact("gate"));
     }
 
     /**

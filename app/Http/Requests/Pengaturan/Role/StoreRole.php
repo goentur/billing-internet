@@ -25,7 +25,7 @@ class StoreRole extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|string|max:255|unique:' . Role::class,
+            'nama' => 'required|string|max:255|unique:' . Role::class . ',name',
             'permissions' => 'required|array',
             'permissions.*' => Rule::exists(Permission::class, 'uuid'),
         ];

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PaketInternet extends Model
 {
     use HasUuids;
-    protected $fillable = ['perusahaan_id', 'nama', ' harga'];
+    protected $fillable = ['perusahaan_id', 'nama', 'harga'];
 
     function perusahaan()
     {

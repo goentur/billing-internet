@@ -23,20 +23,20 @@ class PenggunaController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index-pengguna', only: ['index', 'data']),
-            new Middleware('can:create-pengguna', only: ['store']),
-            new Middleware('can:update-pengguna', only: ['update']),
-            new Middleware('can:delete-pengguna', only: ['destroy'])
+            new Middleware('can:pengguna-index', only: ['index', 'data']),
+            new Middleware('can:pengguna-create', only: ['store']),
+            new Middleware('can:pengguna-update', only: ['update']),
+            new Middleware('can:pengguna-delete', only: ['destroy'])
         ];
     }
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
             return [
-                'create' => $user->can('create-pengguna'),
-                'update' => $user->can('update-pengguna'),
-                'delete' => $user->can('delete-pengguna'),
+                'create' => $user->can('pengguna-create'),
+                'update' => $user->can('pengguna-update'),
+                'delete' => $user->can('pengguna-delete'),
             ];
         });
     }
@@ -46,7 +46,8 @@ class PenggunaController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        return inertia('Pengaturan/Pengguna/Index');
+        $gate = $this->gate();
+        return inertia('Pengaturan/Pengguna/Index', compact("gate"));
     }
 
     /**
@@ -106,21 +107,5 @@ class PenggunaController extends Controller implements HasMiddleware
     public function data(Request $request)
     {
         return response()->json($this->repository->data($request), 200);
-    }
-
-    /**
-     * All resource from storage.
-     */
-    public function allData()
-    {
-        return response()->json(
-            $this->repository->allData()->map(function ($item) {
-                return [
-                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
-                    'label' => $item->name, // Sesuaikan dengan kolom yang digunakan sebagai label
-                ];
-            }),
-            200
-        );
     }
 }

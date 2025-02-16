@@ -10,7 +10,15 @@ import PaginationControls from '@/Components/PaginationControls';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import PaginationSearchForm from '@/Components/PaginationSearchForm';
 
-export default function Index() {
+type indexProps = {
+    gate: {
+        create : boolean,
+        update : boolean,
+        delete : boolean,
+    };  
+};
+
+export default function Index({gate}:indexProps) {
     const judul = "Perusahaan";
     const [form, setForm] = useState(false);
     const [hapus, setHapus] = useState(false);
@@ -109,8 +117,8 @@ export default function Index() {
                     <CardTitle className="text-xl">{judul}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <PaginationSearchForm setDataInfo={setDataInfo} setForm={setForm} setIsEdit={setIsEdit} reset={reset}/>
-                    <DataTable loading={loading} dataTable={dataTable} setForm={setForm} setIsEdit={setIsEdit} setData={setData} setHapus={setHapus} />
+                    <PaginationSearchForm gate={gate} setDataInfo={setDataInfo} setForm={setForm} setIsEdit={setIsEdit} reset={reset}/>
+                    <DataTable gate={gate} loading={loading} dataTable={dataTable} dataInfo={dataInfo.from} setForm={setForm} setIsEdit={setIsEdit} setData={setData} setHapus={setHapus} />
                     <PaginationControls dataInfo={dataInfo} setDataInfo={setDataInfo} linksPagination={linksPagination} />
                 </CardContent>
             </Card>

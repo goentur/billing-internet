@@ -13,4 +13,9 @@ export const alertApp = (e: any, type: 'error' | null = null) => {
             : message,
     });
 };
+export const formatUang = (angka:string) => {
+    return parseFloat(angka)
+        .toFixed(0)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
 

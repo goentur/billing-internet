@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Master\OdpController;
 use App\Http\Controllers\Master\PaketInternetController;
+use App\Http\Controllers\Master\PegawaiController;
 use App\Http\Controllers\Master\PelangganController;
 use App\Http\Controllers\Master\PemilikController;
 use App\Http\Controllers\Master\PerusahaanController;
@@ -9,7 +11,6 @@ use App\Http\Controllers\Pengaturan\PenggunaController;
 use App\Http\Controllers\Pengaturan\PermissionController;
 use App\Http\Controllers\Pengaturan\RoleController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,24 +28,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::prefix('master')->name('master.')->group(function () {
         Route::prefix('zona-waktu')->name('zona-waktu.')->group(function () {
-            Route::post('data', [ZonaWaktuController::class, 'data'])->name('data');
+            Route::middleware('can:zona-waktu-index')->post('data', [ZonaWaktuController::class, 'data'])->name('data');
             Route::post('all-data', [ZonaWaktuController::class, 'allData'])->name('all-data');
         });
         Route::prefix('perusahaan')->name('perusahaan.')->group(function () {
-            Route::post('data', [PerusahaanController::class, 'data'])->name('data');
+            Route::middleware('can:perusahaan-index')->post('data', [PerusahaanController::class, 'data'])->name('data');
             Route::post('all-data', [PerusahaanController::class, 'allData'])->name('all-data');
         });
         Route::prefix('pemilik')->name('pemilik.')->group(function () {
-            Route::post('data', [PemilikController::class, 'data'])->name('data');
+            Route::middleware('can:pemilik-index')->post('data', [PemilikController::class, 'data'])->name('data');
         });
-        Route::resources([
-            'zona-waktu' => ZonaWaktuController::class,
-            'perusahaan' => PerusahaanController::class,
-            'paket-internet' => PaketInternetController::class,
-            'pelanggan' => PelangganController::class,
-            'pemilik' => PemilikController::class,
-            'pegawai' => ZonaWaktuController::class,
-        ]);
+        Route::prefix('paket-internet')->name('paket-internet.')->group(function () {
+            Route::middleware('can:paket-internet-index')->post('data', [PaketInternetController::class, 'data'])->name('data');
+            Route::post('all-data', [PaketInternetController::class, 'allData'])->name('all-data');
+        });
+        Route::prefix('odp')->name('odp.')->group(function () {
+            Route::middleware('can:odp-index')->post('data', [OdpController::class, 'data'])->name('data');
+            Route::post('all-data', [OdpController::class, 'allData'])->name('all-data');
+        });
+        Route::prefix('pegawai')->name('pegawai.')->group(function () {
+            Route::middleware('can:pegawai-index')->post('data', [PegawaiController::class, 'data'])->name('data');
+        });
+        Route::resource('zona-waktu', ZonaWaktuController::class)->middleware('can:zona-waktu-index');
+        Route::resource('perusahaan', PerusahaanController::class)->middleware('can:perusahaan-index');
+        Route::resource('paket-internet', PaketInternetController::class)->middleware('can:paket-internet-index');
+        Route::resource('odp', OdpController::class)->middleware('can:odp-index');
+        Route::resource('pelanggan', PelangganController::class)->middleware('can:pelanggan-index');
+        Route::resource('pemilik', PemilikController::class)->middleware('can:pemilik-index');
+        Route::resource('pegawai', PegawaiController::class)->middleware('can:pegawai-index');
     });
     Route::prefix('pengaturan')->name('pengaturan.')->group(function () {
         Route::prefix('pengguna')->name('pengguna.')->group(function () {
@@ -58,11 +69,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('data', [PermissionController::class, 'data'])->name('data');
             Route::post('all-data', [PermissionController::class, 'allData'])->name('all-data');
         });
-        Route::resources([
-            'pengguna' => PenggunaController::class,
-            'role' => RoleController::class,
-            'permission' => PermissionController::class
-        ]);
+        Route::resource('pengguna', PenggunaController::class)->middleware('can:pengguna-index');
+        Route::resource('role', RoleController::class)->middleware('can:role-index');
+        Route::resource('permission', PermissionController::class)->middleware('can:permission-index');
     });
 });
 

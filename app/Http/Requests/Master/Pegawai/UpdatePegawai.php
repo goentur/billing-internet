@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Pengaturan\Role;
+namespace App\Http\Requests\Master\Pegawai;
 
-use App\Models\Permission;
+use App\Models\ZonaWaktu;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateRole extends FormRequest
+class UpdatePegawai extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class UpdateRole extends FormRequest
     public function rules(): array
     {
         return [
-            'permissions' => 'required|array',
-            'permissions.*' => Rule::exists(Permission::class, 'uuid'),
+            'nama' => 'required|string|max:255',
+            'zona_waktu' => 'required|string|uuid|' . Rule::exists(ZonaWaktu::class, 'id'),
         ];
     }
 }

@@ -26,7 +26,6 @@ type FormDialogProps = {
     dataRoles: { value: string; label: string }[];
 };
 export default function FormDialog({open,setOpen,judul,data,isEdit,setData,errors,formRefs,processing,simpanAtauUbah, dataRoles}:FormDialogProps) {
-    console.log(data)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>

@@ -3,29 +3,30 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Master\Pemilik\StorePemilik;
-use App\Http\Requests\Master\Pemilik\UpdatePemilik;
+use App\Http\Requests\Master\Pegawai\StorePegawai;
+use App\Http\Requests\Master\Pegawai\UpdatePegawai;
 use App\Models\User;
-use App\Repositories\Master\PemilikRepository;
+use App\Repositories\Master\PegawaiRepository;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Cache;
 
-class PemilikController extends Controller
+class PegawaiController extends Controller implements HasMiddleware
 {
-    protected PemilikRepository $repository;
+    protected PegawaiRepository $repository;
 
-    public function __construct(PemilikRepository $repository)
+    public function __construct(PegawaiRepository $repository)
     {
         $this->repository = $repository;
     }
     public static function middleware(): array
     {
         return [
-            new Middleware('can:pemilik-index', only: ['index', 'data']),
-            new Middleware('can:pemilik-create', only: ['store']),
-            new Middleware('can:pemilik-update', only: ['update']),
-            new Middleware('can:pemilik-delete', only: ['destroy'])
+            new Middleware('can:pegawai-index', only: ['index', 'data']),
+            new Middleware('can:pegawai-create', only: ['store']),
+            new Middleware('can:pegawai-update', only: ['update']),
+            new Middleware('can:pegawai-delete', only: ['destroy'])
         ];
     }
     private function gate(): array
@@ -33,9 +34,9 @@ class PemilikController extends Controller
         $user = auth()->user();
         return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
             return [
-                'create' => $user->can('pemilik-create'),
-                'update' => $user->can('pemilik-update'),
-                'delete' => $user->can('pemilik-delete'),
+                'create' => $user->can('pegawai-create'),
+                'update' => $user->can('pegawai-update'),
+                'delete' => $user->can('pegawai-delete'),
             ];
         });
     }
@@ -46,7 +47,7 @@ class PemilikController extends Controller
     public function index()
     {
         $gate = $this->gate();
-        return inertia('Master/Pemilik/Index', compact("gate"));
+        return inertia('Master/Pegawai/Index', compact("gate"));
     }
 
     /**
@@ -60,7 +61,7 @@ class PemilikController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePemilik $request)
+    public function store(StorePegawai $request)
     {
         $this->repository->store($request);
         back()->with('success', 'Data berhasil ditambahkan');
@@ -69,7 +70,7 @@ class PemilikController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $Pegawai)
     {
         abort(404);
     }
@@ -77,7 +78,7 @@ class PemilikController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(PegawaiRepository $repository)
     {
         abort(404);
     }
@@ -85,18 +86,18 @@ class PemilikController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePemilik $request)
+    public function update(UpdatePegawai $request, User $pegawai)
     {
-        $this->repository->update($request->id, $request);
+        $this->repository->update($pegawai->id, $request);
         back()->with('success', 'Data berhasil diubah');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(User $pegawai)
     {
-        $this->repository->delete($request->id);
+        $this->repository->delete($pegawai->id);
         back()->with('success', 'Data berhasil dihapus');
     }
 

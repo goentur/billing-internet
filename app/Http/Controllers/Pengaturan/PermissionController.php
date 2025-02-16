@@ -23,20 +23,20 @@ class PermissionController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index-permission', only: ['index', 'data']),
-            new Middleware('can:create-permission', only: ['store']),
-            new Middleware('can:update-permission', only: ['update']),
-            new Middleware('can:delete-permission', only: ['destroy'])
+            new Middleware('can:permission-index', only: ['index', 'data']),
+            new Middleware('can:permission-create', only: ['store']),
+            new Middleware('can:permission-update', only: ['update']),
+            new Middleware('can:permission-delete', only: ['destroy'])
         ];
     }
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
             return [
-                'create' => $user->can('create-permission'),
-                'update' => $user->can('update-permission'),
-                'delete' => $user->can('delete-permission'),
+                'create' => $user->can('permission-create'),
+                'update' => $user->can('permission-update'),
+                'delete' => $user->can('permission-delete'),
             ];
         });
     }
@@ -46,7 +46,8 @@ class PermissionController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        return inertia('Pengaturan/Permission/Index');
+        $gate = $this->gate();
+        return inertia('Pengaturan/Permission/Index', compact("gate"));
     }
 
     /**

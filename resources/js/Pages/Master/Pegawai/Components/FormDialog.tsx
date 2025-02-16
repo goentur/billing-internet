@@ -43,6 +43,7 @@ type FormDialogProps = {
 };
 export default function FormDialog({open,setOpen,judul,data,setData,errors,formRefs,processing, isEdit,simpanAtauUbah,dataZonaWaktu}:FormDialogProps) {
     const [openSelectZonaWaktu, setOpenSelectZonaWaktu] = useState(false)
+    const [openSelectPerusahaan, setOpenSelectPerusahaan] = useState(false)
     return (
         <div>
             <Dialog open={open} onOpenChange={setOpen}>

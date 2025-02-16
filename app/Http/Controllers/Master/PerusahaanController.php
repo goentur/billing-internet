@@ -22,20 +22,20 @@ class PerusahaanController extends Controller
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index-perusahaan', only: ['index', 'data']),
-            new Middleware('can:create-perusahaan', only: ['store']),
-            new Middleware('can:update-perusahaan', only: ['update']),
-            new Middleware('can:delete-perusahaan', only: ['destroy'])
+            new Middleware('can:perusahaan-index', only: ['index', 'data']),
+            new Middleware('can:perusahaan-create', only: ['store']),
+            new Middleware('can:perusahaan-update', only: ['update']),
+            new Middleware('can:perusahaan-delete', only: ['destroy'])
         ];
     }
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
             return [
-                'create' => $user->can('create-perusahaan'),
-                'update' => $user->can('update-perusahaan'),
-                'delete' => $user->can('delete-perusahaan'),
+                'create' => $user->can('perusahaan-create'),
+                'update' => $user->can('perusahaan-update'),
+                'delete' => $user->can('perusahaan-delete'),
             ];
         });
     }
@@ -45,7 +45,8 @@ class PerusahaanController extends Controller
      */
     public function index()
     {
-        return inertia('Master/Perusahaan/Index');
+        $gate = $this->gate();
+        return inertia('Master/Perusahaan/Index', compact("gate"));
     }
 
     /**

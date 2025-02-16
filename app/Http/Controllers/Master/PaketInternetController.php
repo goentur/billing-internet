@@ -3,17 +3,51 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Master\PaketInternet\StorePaketInternet;
+use App\Http\Requests\Master\PaketInternet\UpdatePaketInternet;
 use App\Models\PaketInternet;
+use App\Repositories\Master\PaketInternetRepository;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Cache;
 
-class PaketInternetController extends Controller
+class PaketInternetController extends Controller implements HasMiddleware
 {
+    protected PaketInternetRepository $repository;
+
+    public function __construct(PaketInternetRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('can:paket-internet-index', only: ['index', 'data']),
+            new Middleware('can:paket-internet-create', only: ['store']),
+            new Middleware('can:paket-internet-update', only: ['update']),
+            new Middleware('can:paket-internet-delete', only: ['destroy'])
+        ];
+    }
+    private function gate(): array
+    {
+        $user = auth()->user();
+        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+            return [
+                'create' => $user->can('paket-internet-create'),
+                'update' => $user->can('paket-internet-update'),
+                'delete' => $user->can('paket-internet-delete'),
+            ];
+        });
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $gate = $this->gate();
+        return inertia('Master/PaketInternet/Index', compact("gate"));
     }
 
     /**
@@ -21,15 +55,16 @@ class PaketInternetController extends Controller
      */
     public function create()
     {
-        //
+        abort(404);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePaketInternet $request)
     {
-        //
+        $this->repository->store($request);
+        back()->with('success', 'Data berhasil ditambahkan');
     }
 
     /**
@@ -37,23 +72,24 @@ class PaketInternetController extends Controller
      */
     public function show(PaketInternet $paketInternet)
     {
-        //
+        abort(404);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PaketInternet $paketInternet)
+    public function edit(PaketInternetRepository $repository)
     {
-        //
+        abort(404);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PaketInternet $paketInternet)
+    public function update(UpdatePaketInternet $request, PaketInternet $paketInternet)
     {
-        //
+        $this->repository->update($paketInternet->id, $request);
+        back()->with('success', 'Data berhasil diubah');
     }
 
     /**
@@ -61,6 +97,31 @@ class PaketInternetController extends Controller
      */
     public function destroy(PaketInternet $paketInternet)
     {
-        //
+        $this->repository->delete($paketInternet->id);
+        back()->with('success', 'Data berhasil dihapus');
+    }
+
+    /**
+     * Resource from storage.
+     */
+    public function data(Request $request)
+    {
+        return response()->json($this->repository->data($request), 200);
+    }
+
+    /**
+     * All resource from storage.
+     */
+    public function allData()
+    {
+        return response()->json(
+            $this->repository->allData('asdas')->map(function ($item) {
+                return [
+                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
+                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
+                ];
+            }),
+            200
+        );
     }
 }

@@ -23,20 +23,20 @@ class RoleController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index-role', only: ['index', 'data']),
-            new Middleware('can:create-role', only: ['store']),
-            new Middleware('can:update-role', only: ['update']),
-            new Middleware('can:delete-role', only: ['destroy'])
+            new Middleware('can:role-index', only: ['index', 'data']),
+            new Middleware('can:role-create', only: ['store']),
+            new Middleware('can:role-update', only: ['update']),
+            new Middleware('can:role-delete', only: ['destroy'])
         ];
     }
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
             return [
-                'create' => $user->can('create-role'),
-                'update' => $user->can('update-role'),
-                'delete' => $user->can('delete-role'),
+                'create' => $user->can('role-create'),
+                'update' => $user->can('role-update'),
+                'delete' => $user->can('role-delete'),
             ];
         });
     }
@@ -46,7 +46,8 @@ class RoleController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        return inertia('Pengaturan/Role/Index');
+        $gate = $this->gate();
+        return inertia('Pengaturan/Role/Index', compact("gate"));
     }
 
     /**

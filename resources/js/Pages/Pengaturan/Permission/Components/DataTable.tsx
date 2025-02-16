@@ -8,15 +8,21 @@ import {
 import { BadgeX, DatabaseBackup, Ellipsis, Loader2, Pencil } from 'lucide-react';
 
 type DataTableProps = {
+  gate:{
+    create : boolean,
+    update : boolean,
+    delete : boolean,
+  };
   loading: boolean;
   dataTable: [];
+  dataInfo: number;
   setForm: React.Dispatch<React.SetStateAction<boolean>>;
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
   setData: React.Dispatch<React.SetStateAction<any>>;
   setHapus: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function DataTable({loading,dataTable,setForm,setIsEdit,setData,setHapus} : DataTableProps) {
+export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIsEdit,setData,setHapus} : DataTableProps) {
     return (
         <table className="w-full text-left border-collapse border">
             <thead>
@@ -40,25 +46,20 @@ export default function DataTable({loading,dataTable,setForm,setIsEdit,setData,s
                 ):
                 dataTable.length > 0 ? dataTable.map((value : any,index:number) => (
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-900 align-text-top">
-                    <td className="px-2 py-1 border text-center">{++index}</td>
+                    <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                     <td className="px-2 py-1 border">{value.name}</td>
                     <td className="px-2 py-1 border">{value.guard_name}</td>
                     <td className="px-2 py-1 border">
                         {value.roles?.map((p:any) => (
-                            <Badge variant={"outline"} key={p.uuid} className="me-1">{p.name}</Badge>
+                            <Badge variant={"outline"} key={p.uuid} className="me-1 mb-1">{p.name}</Badge>
                         ))}
                     </td>
                     <td className="border text-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({
-                                    uuid:value.uuid,
-                                    nama:value.name,
-                                    guard_name:value.guard_name,
-                                    roles:value.roles?.map((p:any) => p.uuid) || []
-                                })}}><Pencil/> Ubah</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => {setHapus(true), setData({uuid:value.uuid})}}><BadgeX/> Hapus</DropdownMenuItem>
+                                {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ uuid:value.uuid, nama:value.name, guard_name:value.guard_name, roles:value.roles?.map((p:any) => p.uuid) || []})}}><Pencil/> Ubah</DropdownMenuItem>}
+                                {gate.delete && <DropdownMenuItem onClick={() => {setHapus(true), setData({uuid:value.uuid})}}><BadgeX/> Hapus</DropdownMenuItem>}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </td>
