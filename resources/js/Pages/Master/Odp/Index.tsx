@@ -10,6 +10,7 @@ import DataTable from './Components/DataTable';
 import FormDialog from './Components/FormDialog';
 import OpenLayersMap from './Components/OpenLayersMap';
 import DeleteDialog from '@/Components/DeleteDialog';
+import FormDialogPelanggan from './Components/FormDialogPelanggan';
 
 type indexProps = {
     gate: {
@@ -29,6 +30,8 @@ export default function Index({gate}:indexProps) {
     const [isEdit, setIsEdit] = useState(false);
     const [dataTable, setDataTable] = useState<[]>([]);
     const [dataMaps, setDataMaps] = useState<[]>([]);
+    const [dataPaketInternet, setDataPaketInternet] = useState<[]>([]);
+    const [formPelanggan, setFormPelanggan] = useState(false);
     const [linksPagination, setLinksPagination] = useState([]);
     const [dataInfo, setDataInfo] = useState({
         currentPage: 1,
@@ -37,6 +40,7 @@ export default function Index({gate}:indexProps) {
         totalRecords: 0,
         perPage: 25,
         search: null,
+        perusahaan: perusahaan?.id,
         odp: null,
         nama: null,
         alamat: null,
@@ -51,6 +55,7 @@ export default function Index({gate}:indexProps) {
     });
     useEffect(() => {
         getData();
+        getDataPaketInternet()
     }, []);
 
     useEffect(() => {
@@ -63,6 +68,16 @@ export default function Index({gate}:indexProps) {
                 perusahaan: perusahaan?.id
             });
             setDataMaps(response.data);
+        } catch (error:any) {
+            alertApp(error.message, 'error');
+        }
+    };
+    const getDataPaketInternet = async () => {
+        try {
+            const response = await axios.post(route('master.paket-internet.all-data'), {
+                perusahaan: perusahaan?.id
+            });
+            setDataPaketInternet(response.data);
         } catch (error:any) {
             alertApp(error.message, 'error');
         }
@@ -117,17 +132,13 @@ export default function Index({gate}:indexProps) {
     };
     const handleSubmitPelanggan = (e: React.FormEvent) => {
         e.preventDefault();
-        const action = isEdit ? patch : post;
-        const routeName = isEdit 
-            ? route('master.pelanggan.update', data) as string 
-            : route('master.pelanggan.store') as string;
-        action(routeName, {
+        post(route('master.pelanggan.store'), {
             preserveScroll: true,
             onSuccess: (e) => {
-                setForm(false);
+                setFormPelanggan(false);
                 reset();
                 alertApp(e);
-                getData();
+                getDataPelanggan();
             },
             onError: (e) => {
                 const firstErrorKey = Object.keys(e)[0];
@@ -178,11 +189,12 @@ export default function Index({gate}:indexProps) {
                     </div>
                     <OpenLayersMap gate={gate} dataMaps={dataMaps} perusahaan={perusahaan} setForm={setForm} setData={setData} setDataInfo={setDataInfo}/>
                     <div className="mt-5">
-                    <DataTable gate={gate} loading={loading} dataTable={dataTable} dataInfo={dataInfo} setData={setData} setDataInfo={setDataInfo} setForm={setForm} setIsEdit={setIsEdit} setHapus={setHapus} />
+                    <DataTable gate={gate} loading={loading} dataTable={dataTable} dataInfo={dataInfo} setData={setData} setDataInfo={setDataInfo} setForm={setForm} setIsEdit={setIsEdit} setHapus={setHapus} setFormPelanggan={setFormPelanggan} />
                     <PaginationControls dataInfo={dataInfo} setDataInfo={setDataInfo} linksPagination={linksPagination} />
                     </div>
                 </CardContent>
             </Card>
+            <FormDialogPelanggan open={formPelanggan} setOpen={setFormPelanggan} data={data} setData={setData} errors={errors} formRefs={formRefs} processing={processing} simpanPelanggan={handleSubmitPelanggan} dataPaketInternet={dataPaketInternet} />
             <FormDialog open={form} setOpen={setForm} judul={judul} data={data} setData={setData} errors={errors} formRefs={formRefs} processing={processing} simpanAtauUbah={handleSubmit} />
             <DeleteDialog open={hapus} setOpen={setHapus} processing={processing} handleHapusData={handleHapus}/>
         </AuthenticatedLayout>

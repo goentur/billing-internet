@@ -55,7 +55,7 @@ class OdpController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        //
+        abort(404);
     }
 
     /**
@@ -72,7 +72,7 @@ class OdpController extends Controller implements HasMiddleware
      */
     public function show(Odp $odp)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -80,7 +80,7 @@ class OdpController extends Controller implements HasMiddleware
      */
     public function edit(Odp $odp)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -107,5 +107,21 @@ class OdpController extends Controller implements HasMiddleware
     public function data(Request $request)
     {
         return response()->json($this->repository->data($request), 200);
+    }
+
+    /**
+     * All resource from storage.
+     */
+    public function allData(Request $request)
+    {
+        return response()->json(
+            $this->repository->allData($request)->map(function ($item) {
+                return [
+                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
+                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
+                ];
+            }),
+            200
+        );
     }
 }

@@ -8,9 +8,9 @@ class PaketInternetRepository
 {
     public function __construct(protected PaketInternet $model) {}
 
-    public function allData($perusahaan)
+    public function allData($request)
     {
-        return $this->model::select('id', 'nama', 'harga')->where('perusahaan_id', $perusahaan)->get();
+        return $this->model::select('id', 'nama', 'harga')->where('perusahaan_id', $request->perusahaan)->get();
     }
 
     public function data($request)

@@ -21,6 +21,7 @@ class PelangganRepository
                 ->orWhere('tanggal_bayar', 'like', '%' . $request->search . '%')
                 ->orWhere('telp', 'like', '%' . $request->search . '%')
                 ->orWhere('alamat', 'like', '%' . $request->search . '%')
+                ->orWhereHas('odp', fn($q) => $q->where('nama', 'like', "%{$request->search}%"))
                 ->orWhereHas('paketInternet', fn($q) => $q->where('nama', 'like', "%{$request->search}%"));
         }
         if ($request->odp) {
@@ -33,16 +34,23 @@ class PelangganRepository
     {
         return $this->model->create([
             'perusahaan_id' => $request->perusahaan,
+            'odp_id' => $request->odp,
+            'paket_internet_id' => $request->paket_internet,
             'nama' => $request->nama,
-            'harga' => $request->harga,
+            'tanggal_bayar' => $request->tanggal_bayar,
+            'telp' => $request->telp,
+            'alamat' => $request->alamat,
         ]);
     }
 
     public function update($id, $request)
     {
-        return $this->model->findOrFail($id)?->update([
+        return $this->model->findOrFail($id)?->update(['odp_id' => $request->odp,
+            'paket_internet_id' => $request->paket_internet,
             'nama' => $request->nama,
-            'harga' => $request->harga,
+            'tanggal_bayar' => $request->tanggal_bayar,
+            'telp' => $request->telp,
+            'alamat' => $request->alamat,
         ]);
     }
 

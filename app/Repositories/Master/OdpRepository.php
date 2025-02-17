@@ -9,9 +9,9 @@ class OdpRepository
 {
     public function __construct(protected Odp $model) {}
 
-    public function allData($perusahaan)
+    public function allData($request)
     {
-        return $this->model::select('id', 'nama', 'alamat')->where('perusahaan_id', $perusahaan)->get();
+        return $this->model::select('id', 'nama')->where('perusahaan_id', $request->perusahaan)->get();
     }
 
     public function data($request)

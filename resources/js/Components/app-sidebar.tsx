@@ -63,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			},
 			{
 				title: "Pelanggan",
-				url: "dashboard",
+				url: "master.pelanggan.index",
 				icon: Users,
 				permission: 'pelanggan-index',
 			},

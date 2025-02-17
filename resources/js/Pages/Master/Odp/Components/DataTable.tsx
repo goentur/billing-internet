@@ -24,9 +24,10 @@ type DataTableProps = {
     setForm: React.Dispatch<React.SetStateAction<boolean>>;
     setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
     setHapus: React.Dispatch<React.SetStateAction<boolean>>;
+    setFormPelanggan: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function DataTable({gate,loading,dataTable,dataInfo,setData,setDataInfo,setForm,setIsEdit,setHapus} : DataTableProps) {
+export default function DataTable({gate,loading,dataTable,dataInfo,setData,setDataInfo,setForm,setIsEdit,setHapus,setFormPelanggan} : DataTableProps) {
     return (
         <> 
             <div className="mb-4">
@@ -66,7 +67,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setData,setDa
                             required
                             onChange={(e) => setDataInfo((prev:any) => ({...prev, search:e.target.value, currentPage : 1}))}
                         />
-                        {gate.pelanggan && <Button type="button" variant="destructive" disabled={dataInfo.odp?false:true}><Plus/> Tambah Pelanggan</Button>}
+                        {gate.pelanggan && <Button type="button" variant="destructive" disabled={dataInfo.odp?false:true} onClick={() => {setFormPelanggan(true),setData({perusahaan:dataInfo.perusahaan,odp:dataInfo.odp})}}><Plus/> Tambah Pelanggan</Button>}
                     </form>
                 </div>
             </div>

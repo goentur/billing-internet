@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Master\Pelanggan\StorePelanggan;
+use App\Http\Requests\Master\Pelanggan\UpdatePelanggan;
 use App\Models\Pelanggan;
 use App\Repositories\Master\PelangganRepository;
 use Illuminate\Http\Request;
@@ -21,10 +23,10 @@ class PelangganController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:paket-internet-index', only: ['index', 'data']),
-            new Middleware('can:paket-internet-create', only: ['store']),
-            new Middleware('can:paket-internet-update', only: ['update']),
-            new Middleware('can:paket-internet-delete', only: ['destroy'])
+            new Middleware('can:pelanggan-index', only: ['index', 'data']),
+            new Middleware('can:pelanggan-create', only: ['store']),
+            new Middleware('can:pelanggan-update', only: ['update']),
+            new Middleware('can:pelanggan-delete', only: ['destroy'])
         ];
     }
     private function gate(): array
@@ -32,18 +34,20 @@ class PelangganController extends Controller implements HasMiddleware
         $user = auth()->user();
         return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
             return [
-                'create' => $user->can('paket-internet-create'),
-                'update' => $user->can('paket-internet-update'),
-                'delete' => $user->can('paket-internet-delete'),
+                'create' => $user->can('pelanggan-create'),
+                'update' => $user->can('pelanggan-update'),
+                'delete' => $user->can('pelanggan-delete'),
             ];
         });
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $gate = $this->gate();
+        return inertia('Master/Pelanggan/Index', compact("gate"));
     }
 
     /**
@@ -51,15 +55,16 @@ class PelangganController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        //
+        abort(404);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePelanggan $request)
     {
-        //
+        $this->repository->store($request);
+        back()->with('success', 'Data berhasil ditambahkan');
     }
 
     /**
@@ -67,23 +72,24 @@ class PelangganController extends Controller implements HasMiddleware
      */
     public function show(Pelanggan $pelanggan)
     {
-        //
+        abort(404);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pelanggan $pelanggan)
+    public function edit(PelangganRepository $repository)
     {
-        //
+        abort(404);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pelanggan $pelanggan)
+    public function update(UpdatePelanggan $request, Pelanggan $pelanggan)
     {
-        //
+        $this->repository->update($pelanggan->id, $request);
+        back()->with('success', 'Data berhasil diubah');
     }
 
     /**
@@ -91,7 +97,8 @@ class PelangganController extends Controller implements HasMiddleware
      */
     public function destroy(Pelanggan $pelanggan)
     {
-        //
+        $this->repository->delete($pelanggan->id);
+        back()->with('success', 'Data berhasil dihapus');
     }
 
     /**
@@ -100,5 +107,21 @@ class PelangganController extends Controller implements HasMiddleware
     public function data(Request $request)
     {
         return response()->json($this->repository->data($request), 200);
+    }
+
+    /**
+     * All resource from storage.
+     */
+    public function allData()
+    {
+        return response()->json(
+            $this->repository->allData('asdas')->map(function ($item) {
+                return [
+                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
+                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
+                ];
+            }),
+            200
+        );
     }
 }

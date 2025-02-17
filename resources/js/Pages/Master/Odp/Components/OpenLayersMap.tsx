@@ -67,6 +67,7 @@ export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, set
             mapInstance.current = map;
             vectorLayerRef.current = vectorLayer;
 
+            // **Menangani Klik pada Fitur**
             map.on('click', (event) => {
                 const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
                 if (feature) {
@@ -77,6 +78,17 @@ export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, set
                         alamat: feature.get('alamat'),
                         currentPage: 1,
                     }));
+                }
+            });
+
+            // **Menangani Perubahan Kursor (Cursor Pointer)**
+            map.on('pointermove', (event) => {
+                const targetElement = map.getTargetElement();
+                const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+                if (feature) {
+                    targetElement.style.cursor = 'pointer';
+                } else {
+                    targetElement.style.cursor = 'default';
                 }
             });
 
@@ -122,7 +134,7 @@ export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, set
 
                 // **Tambahkan Label (Overlay)**
                 const labelElement = document.createElement('div');
-                labelElement.className = 'text-xs';
+                labelElement.className = 'pin-label';
                 labelElement.innerHTML = nama;
 
                 const overlay = new Overlay({
