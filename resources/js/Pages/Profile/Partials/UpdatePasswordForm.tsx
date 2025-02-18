@@ -1,14 +1,14 @@
 import InfoPassword from '@/Components/ui/info-password';
 import { Label } from '@/Components/ui/label';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
-import { Input } from '@/components/ui/input';
+} from "@/Components/ui/card";
+import { Input } from '@/Components/ui/input';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { Loader2, Save } from 'lucide-react';

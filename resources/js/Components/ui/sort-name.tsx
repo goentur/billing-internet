@@ -1,7 +1,7 @@
 import { AvatarFallback } from "./avatar";
 
-const ShortName = ({ name }) => {
-  const getInitials = (name) => {
+const ShortName = ({ name }:any) => {
+  const getInitials = (name : any) => {
     const words = name.trim().split(" ");
 
     if (words.length === 1) {

@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "@/Components/ui/card";
 import InfoPassword from "@/Components/ui/info-password";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Loader2, Save } from 'lucide-react';
@@ -52,7 +52,7 @@ export default function Register() {
                                             className={errors.name && "border-red-500"}
                                             placeholder="Masukan nama"
                                             autoFocus={true}
-                                            onChange={(e) => setData('name', e.target.value)}
+                                            onChange={(e:any) => setData('name', e.target.value)}
                                             autoComplete="off"
                                             required
                                         />
@@ -67,7 +67,7 @@ export default function Register() {
                                             className={errors.email && "border-red-500"}
                                             placeholder="Masukan email"
                                             autoComplete="username"
-                                            onChange={(e) => setData('email', e.target.value)}
+                                            onChange={(e:any) => setData('email', e.target.value)}
                                             required
                                         />
                                         {errors.email && <div className="text-red-500 text-xs mt-0">{errors.email}</div>}
@@ -79,7 +79,7 @@ export default function Register() {
                                             name="password"
                                             type="password"
                                             placeholder="Masukan password"
-                                            onChange={(e) => setData('password', e.target.value)}
+                                            onChange={(e:any) => setData('password', e.target.value)}
                                             autoComplete="off"
                                             required
                                         />
@@ -93,7 +93,7 @@ export default function Register() {
                                             name="password_confirmation"
                                             type="password"
                                             placeholder="Ulangi password"
-                                            onChange={(e) => setData('password_confirmation', e.target.value)}
+                                            onChange={(e:any) => setData('password_confirmation', e.target.value)}
                                             autoComplete="off"
                                             required
                                         />

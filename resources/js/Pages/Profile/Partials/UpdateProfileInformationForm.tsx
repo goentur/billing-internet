@@ -1,5 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from '@/Components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';

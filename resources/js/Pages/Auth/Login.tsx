@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "@/Components/ui/card";
 import { Checkbox } from '@/Components/ui/checkbox';
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Loader2, LogIn } from 'lucide-react';
@@ -91,7 +91,7 @@ export default function Login({
                                     <Checkbox
                                         id="remember"
                                         name="remember"
-                                        onChange={(e) => setData('password', e.target.checked)}
+                                        onChange={(e:any) => setData('remember', e.target.checked)}
                                     />
                                     <label htmlFor="remember" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >Ingat saya</label>

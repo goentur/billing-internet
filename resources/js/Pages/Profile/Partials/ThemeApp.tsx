@@ -11,7 +11,7 @@ export default function ThemeApp() {
     });
 
     // Handle toggling of color mode
-    const toggleThemeApp = (mode) => {
+    const toggleThemeApp = (mode:any) => {
         setThemeApp(mode);
         const newMode = mode ? "dark" : "light";
         localStorage.setItem("theme", newMode);
@@ -29,13 +29,13 @@ export default function ThemeApp() {
             </CardHeader>
             <CardContent>
                 <div className="flex items-center space-x-2">
-                    <Label htmlFor={themeApp ? "color-mode" : null}>Light Mode</Label>
+                    <Label htmlFor={themeApp ? "color-mode" : undefined}>Light Mode</Label>
                     <Switch
                         checked={themeApp}
                         onCheckedChange={toggleThemeApp}
                         id="color-mode"
                     />
-                    <Label htmlFor={themeApp ? null : "color-mode"}>Dark Mode</Label>
+                    <Label htmlFor={themeApp ? undefined : "color-mode"}>Dark Mode</Label>
                 </div>
             </CardContent>
         </Card>

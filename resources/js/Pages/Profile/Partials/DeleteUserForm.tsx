@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import {
     Dialog,
     DialogContent,
@@ -8,8 +8,8 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger
-} from "@/components/ui/dialog";
-import { Input } from '@/components/ui/input';
+} from "@/Components/ui/dialog";
+import { Input } from '@/Components/ui/input';
 import { useForm } from '@inertiajs/react';
 import { CheckCheck, Loader2, OctagonX, X } from 'lucide-react';
 import { FormEventHandler, useRef, useState } from 'react';

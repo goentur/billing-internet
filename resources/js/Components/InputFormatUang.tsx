@@ -15,7 +15,7 @@ const InputFormatUang = ({ data, setData, formRefs }:any) => {
       id="harga"
       name="harga"
       placeholder="Masukkan harga"
-      getInputRef={(el) => {
+      getInputRef={(el : any) => {
         if (formRefs.current) {
           formRefs.current["harga"] = el;
         }
