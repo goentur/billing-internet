@@ -13,21 +13,21 @@ import clsx from "clsx";
 import { Check, ChevronsUpDown, Loader2, Save } from 'lucide-react';
 
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/Components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/Components/ui/popover"
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/Components/ui/command";
 import InfoPassword from '@/Components/ui/info-password';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/Components/ui/popover";
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
 type FormDialogProps = {
     open: boolean;
     setOpen: (open: boolean) => void;

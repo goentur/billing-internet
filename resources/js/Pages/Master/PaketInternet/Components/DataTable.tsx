@@ -36,7 +36,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
             <tbody className="font-light">
                 {loading?(
                     <tr>
-                        <td colSpan={5}>
+                        <td colSpan={4}>
                             <div className="flex items-center justify-center">
                                 <Loader2 className="animate-spin me-2" size={18} />Mohon Tunggu...
                             </div>
@@ -60,7 +60,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                 </tr>
                 )):
                     <tr>
-                        <td colSpan={5}>
+                        <td colSpan={4}>
                             <div className="flex items-center justify-center">
                                 <DatabaseBackup size={18} className='me-2'/> Data tidak ditemukan
                             </div>

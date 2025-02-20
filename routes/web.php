@@ -11,6 +11,7 @@ use App\Http\Controllers\Pengaturan\PenggunaController;
 use App\Http\Controllers\Pengaturan\PermissionController;
 use App\Http\Controllers\Pengaturan\RoleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Transaksi\PembayaranController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -63,19 +64,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::prefix('pengaturan')->name('pengaturan.')->group(function () {
         Route::prefix('pengguna')->name('pengguna.')->group(function () {
-            Route::post('data', [PenggunaController::class, 'data'])->name('data');
+            Route::middleware('can:pengguna-index')->post('data', [PenggunaController::class, 'data'])->name('data');
         });
         Route::prefix('role')->name('role.')->group(function () {
-            Route::post('data', [RoleController::class, 'data'])->name('data');
+            Route::middleware('can:role-index')->post('data', [RoleController::class, 'data'])->name('data');
             Route::post('all-data', [RoleController::class, 'allData'])->name('all-data');
         });
         Route::prefix('permission')->name('permission.')->group(function () {
-            Route::post('data', [PermissionController::class, 'data'])->name('data');
+            Route::middleware('can:permission-index')->post('data', [PermissionController::class, 'data'])->name('data');
             Route::post('all-data', [PermissionController::class, 'allData'])->name('all-data');
         });
         Route::resource('pengguna', PenggunaController::class)->middleware('can:pengguna-index');
         Route::resource('role', RoleController::class)->middleware('can:role-index');
         Route::resource('permission', PermissionController::class)->middleware('can:permission-index');
+    });
+    Route::prefix('transaksi')->name('transaksi.')->group(function () {
+        Route::prefix('pembayaran')->name('pembayaran.')->group(function () {
+            Route::middleware('can:pembayaran-index')->group(function () {
+                Route::get('/', [PembayaranController::class, 'index'])->name('index');
+                Route::post('data', [PembayaranController::class, 'data'])->name('data');
+            });
+            Route::middleware('can:pembayaran-create')->post('store', [PembayaranController::class, 'store'])->name('store');
+        });
     });
 });
 

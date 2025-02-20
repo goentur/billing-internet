@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataPerusahaanRequest;
+use App\Http\Requests\Common\PerusahaanRequest;
 use App\Http\Requests\Master\PaketInternet\StorePaketInternet;
 use App\Http\Requests\Master\PaketInternet\UpdatePaketInternet;
 use App\Models\PaketInternet;
 use App\Repositories\Master\PaketInternetRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class PaketInternetController extends Controller implements HasMiddleware
 {
@@ -32,7 +33,7 @@ class PaketInternetController extends Controller implements HasMiddleware
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('paket-internet-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('paket-internet-create'),
                 'update' => $user->can('paket-internet-update'),
@@ -104,7 +105,7 @@ class PaketInternetController extends Controller implements HasMiddleware
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataPerusahaanRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }
@@ -112,16 +113,8 @@ class PaketInternetController extends Controller implements HasMiddleware
     /**
      * All resource from storage.
      */
-    public function allData(Request $request)
+    public function allData(PerusahaanRequest $request)
     {
-        return response()->json(
-            $this->repository->allData($request)->map(function ($item) {
-                return [
-                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
-                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
-                ];
-            }),
-            200
-        );
+        return response()->json($this->repository->allData($request), 200);
     }
 }

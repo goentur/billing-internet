@@ -24,7 +24,6 @@ class StoreZonaWaktu extends FormRequest
         return [
             'nama' => 'required|string|max:255',
             'singkatan' => 'required|string|max:255',
-            'gmt_offset' => 'required|numeric',
         ];
     }
 }

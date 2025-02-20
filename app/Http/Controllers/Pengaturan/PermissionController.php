@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Pengaturan;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataRequest;
 use App\Http\Requests\Pengaturan\Permission\StorePermission;
 use App\Http\Requests\Pengaturan\Permission\UpdatePermission;
 use App\Models\Permission;
 use App\Repositories\Pengaturan\PermissionRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class PermissionController extends Controller implements HasMiddleware
 {
@@ -32,7 +32,7 @@ class PermissionController extends Controller implements HasMiddleware
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('permission-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('permission-create'),
                 'update' => $user->can('permission-update'),
@@ -104,7 +104,7 @@ class PermissionController extends Controller implements HasMiddleware
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }
@@ -114,14 +114,6 @@ class PermissionController extends Controller implements HasMiddleware
      */
     public function allData()
     {
-        return response()->json(
-            $this->repository->allData()->map(function ($item) {
-                return [
-                    'value' => $item->uuid,
-                    'label' => $item->name,
-                ];
-            }),
-            200
-        );
+        return response()->json($this->repository->allData(), 200);
     }
 }

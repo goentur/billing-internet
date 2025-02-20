@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\PerusahaanRequest;
 use App\Http\Requests\Master\Odp\StoreOdp;
+use App\Http\Requests\Master\Odp\UpdateOdp;
 use App\Models\Odp;
 use App\Repositories\Master\OdpRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class OdpController extends Controller implements HasMiddleware
 {
@@ -31,7 +32,7 @@ class OdpController extends Controller implements HasMiddleware
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('odp-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'pelanggan' => $user->can('pelanggan-create'),
                 'create' => $user->can('odp-create'),
@@ -86,7 +87,7 @@ class OdpController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Odp $odp)
+    public function update(UpdateOdp $request, Odp $odp)
     {
         $this->repository->update($odp->id, $request);
         back()->with('success', 'Data berhasil diubah');
@@ -104,7 +105,7 @@ class OdpController extends Controller implements HasMiddleware
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(PerusahaanRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }
@@ -112,16 +113,8 @@ class OdpController extends Controller implements HasMiddleware
     /**
      * All resource from storage.
      */
-    public function allData(Request $request)
+    public function allData(PerusahaanRequest $request)
     {
-        return response()->json(
-            $this->repository->allData($request)->map(function ($item) {
-                return [
-                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
-                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
-                ];
-            }),
-            200
-        );
+        return response()->json($this->repository->allData($request), 200);
     }
 }

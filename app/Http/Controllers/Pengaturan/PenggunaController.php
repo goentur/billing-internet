@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Pengaturan;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataRequest;
 use App\Http\Requests\Pengaturan\Pengguna\StorePengguna;
 use App\Http\Requests\Pengaturan\Pengguna\UpdatePengguna;
 use App\Models\User;
 use App\Repositories\Pengaturan\PenggunaRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class PenggunaController extends Controller implements HasMiddleware
 {
@@ -32,7 +32,7 @@ class PenggunaController extends Controller implements HasMiddleware
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('pengguna-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('pengguna-create'),
                 'update' => $user->can('pengguna-update'),
@@ -104,7 +104,7 @@ class PenggunaController extends Controller implements HasMiddleware
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }

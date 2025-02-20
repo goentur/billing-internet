@@ -2,15 +2,16 @@
 
 namespace App\Repositories\Master;
 
+use App\Http\Resources\LabelValueResource;
 use App\Models\Pelanggan;
 
 class PelangganRepository
 {
     public function __construct(protected Pelanggan $model) {}
 
-    public function allData($perusahaan)
+    public function allData($request)
     {
-        return $this->model::with('paketInternet')->select('id', 'nama', 'paket_internet_id')->where('perusahaan_id', $perusahaan)->get();
+        return LabelValueResource::collection($this->model::select('id', 'nama')->where('perusahaan_id', $request->perusahaan)->get());
     }
 
     public function data($request)

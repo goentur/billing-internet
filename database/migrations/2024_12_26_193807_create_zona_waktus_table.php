@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nama')->nullable();
             $table->string('singkatan')->nullable();
-            $table->bigInteger('gmt_offset')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataRequest;
 use App\Http\Requests\Master\Pemilik\StorePemilik;
 use App\Http\Requests\Master\Pemilik\UpdatePemilik;
 use App\Models\User;
 use App\Repositories\Master\PemilikRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class PemilikController extends Controller
 {
@@ -31,7 +31,7 @@ class PemilikController extends Controller
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('pemilik-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('pemilik-create'),
                 'update' => $user->can('pemilik-update'),
@@ -85,25 +85,25 @@ class PemilikController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePemilik $request)
+    public function update(UpdatePemilik $request, User $pemilik)
     {
-        $this->repository->update($request->id, $request);
+        $this->repository->update($pemilik->id, $request);
         back()->with('success', 'Data berhasil diubah');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(User $pemilik)
     {
-        $this->repository->delete($request->id);
+        $this->repository->delete($pemilik->id);
         back()->with('success', 'Data berhasil dihapus');
     }
 
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }

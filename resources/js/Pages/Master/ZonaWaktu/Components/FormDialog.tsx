@@ -67,24 +67,6 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                             />
                             {errors.singkatan && <div className="text-red-500 text-xs mt-0">{errors.singkatan}</div>}
                         </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="gmt_offset" className={clsx({ "text-red-500": errors.gmt_offset }, "capitalize")}>gmt offset</Label>
-                            <Input
-                                id="gmt_offset"
-                                name="gmt_offset"
-                                ref={(el) => {
-                                    if (formRefs.current) {
-                                        formRefs.current["gmt_offset"] = el;
-                                    }
-                                }}
-                                type="text"
-                                value={data.gmt_offset}
-                                placeholder="Masukan gmt offset"
-                                onChange={(e) => setData((prevData:any) => ({ ...prevData, gmt_offset: e.target.value }))}
-                                required
-                            />
-                            {errors.gmt_offset && <div className="text-red-500 text-xs mt-0">{errors.gmt_offset}</div>}
-                        </div>
                     </DialogDescription>
                     <DialogFooter>
                         <div className="flex items-center mt-5">

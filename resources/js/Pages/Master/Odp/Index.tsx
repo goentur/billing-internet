@@ -1,3 +1,4 @@
+import DeleteDialog from '@/Components/DeleteDialog';
 import PaginationControls from '@/Components/PaginationControls';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -8,9 +9,8 @@ import { MapPinned } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import DataTable from './Components/DataTable';
 import FormDialog from './Components/FormDialog';
-import OpenLayersMap from './Components/OpenLayersMap';
-import DeleteDialog from '@/Components/DeleteDialog';
 import FormDialogPelanggan from './Components/FormDialogPelanggan';
+import OpenLayersMap from './Components/OpenLayersMap';
 
 type indexProps = {
     gate: {

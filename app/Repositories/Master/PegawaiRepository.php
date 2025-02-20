@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class PegawaiRepository
 {
     public function __construct(protected User $model) {}
+    
     private function applySearchFilter($request)
     {
         return fn($q) => $q->where(function ($query) use ($request) {

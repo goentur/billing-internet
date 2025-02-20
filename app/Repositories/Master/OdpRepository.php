@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Master;
 
+use App\Http\Resources\LabelValueResource;
 use App\Models\Odp;
 use Illuminate\Validation\ValidationException;
 
@@ -11,7 +12,7 @@ class OdpRepository
 
     public function allData($request)
     {
-        return $this->model::select('id', 'nama')->where('perusahaan_id', $request->perusahaan)->get();
+        return LabelValueResource::collection($this->model::select('id', 'nama')->where('perusahaan_id', $request->perusahaan)->get());
     }
 
     public function data($request)

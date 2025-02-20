@@ -1,14 +1,14 @@
+import DeleteDialog from '@/Components/DeleteDialog';
+import PaginationControls from '@/Components/PaginationControls';
+import PaginationSearchForm from '@/Components/PaginationSearchForm';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { alertApp } from '@/utils';
 import { Head, useForm } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { alertApp } from '@/utils';
 import DataTable from './Components/DataTable';
 import FormDialog from './Components/FormDialog';
-import DeleteDialog from '@/Components/DeleteDialog';
-import PaginationControls from '@/Components/PaginationControls';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import PaginationSearchForm from '@/Components/PaginationSearchForm';
 
 type indexProps = {
     gate: {
@@ -40,7 +40,6 @@ export default function Index({gate}:indexProps) {
         id: '',
         nama: '',
         singkatan: '',
-        gmt_offset: '',
     });
 
     useEffect(() => {

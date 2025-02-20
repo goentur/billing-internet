@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Master;
 
+use App\Http\Resources\LabelValueResource;
 use App\Models\Perusahaan;
 use App\Repositories\BaseRepository;
 
@@ -13,7 +14,7 @@ class PerusahaanRepository extends BaseRepository
     }
     public function allData()
     {
-        return $this->model::select('id', 'nama', 'koordinat')->get();
+        return LabelValueResource::collection($this->model::select('id', 'nama')->get());
     }
     public function data($request)
     {

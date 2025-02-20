@@ -83,7 +83,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 		menuTransaksi: [
 			{
 				title: "Pembayaran",
-				url: "dashboard",
+				url: "transaksi.pembayaran.index",
 				icon: HandCoins,
 				permission: 'pembayaran-index',
 			},

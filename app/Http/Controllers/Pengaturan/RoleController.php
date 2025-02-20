@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Pengaturan;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataRequest;
 use App\Http\Requests\Pengaturan\Role\StoreRole;
 use App\Http\Requests\Pengaturan\Role\UpdateRole;
 use App\Models\Role;
 use App\Repositories\Pengaturan\RoleRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class RoleController extends Controller implements HasMiddleware
 {
@@ -32,7 +32,7 @@ class RoleController extends Controller implements HasMiddleware
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('role-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('role-create'),
                 'update' => $user->can('role-update'),
@@ -104,7 +104,7 @@ class RoleController extends Controller implements HasMiddleware
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }
@@ -114,14 +114,6 @@ class RoleController extends Controller implements HasMiddleware
      */
     public function allData()
     {
-        return response()->json(
-            $this->repository->allData()->map(function ($item) {
-                return [
-                    'value' => $item->uuid, // Sesuaikan dengan kolom yang digunakan sebagai value
-                    'label' => $item->name, // Sesuaikan dengan kolom yang digunakan sebagai label
-                ];
-            }),
-            200
-        );
+        return response()->json($this->repository->allData(), 200);
     }
 }

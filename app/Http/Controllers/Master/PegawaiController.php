@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataPerusahaanRequest;
 use App\Http\Requests\Master\Pegawai\StorePegawai;
 use App\Http\Requests\Master\Pegawai\UpdatePegawai;
 use App\Models\User;
 use App\Repositories\Master\PegawaiRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class PegawaiController extends Controller implements HasMiddleware
 {
@@ -32,7 +32,7 @@ class PegawaiController extends Controller implements HasMiddleware
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('pegawai-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('pegawai-create'),
                 'update' => $user->can('pegawai-update'),
@@ -104,7 +104,7 @@ class PegawaiController extends Controller implements HasMiddleware
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataPerusahaanRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }

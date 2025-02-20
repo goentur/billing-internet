@@ -1,8 +1,7 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/Components/ui/card"
-import { Label } from "@/Components/ui/label"
-import { Switch } from "@/Components/ui/switch"
-
-import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/Components/ui/card";
+import { Label } from "@/Components/ui/label";
+import { Switch } from "@/Components/ui/switch";
+import { useState } from "react";
 
 export default function ThemeApp() {
     const [themeApp, setThemeApp] = useState(() => {

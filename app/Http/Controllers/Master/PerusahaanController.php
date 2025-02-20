@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataRequest;
 use App\Http\Requests\Master\Perusahaan\StorePerusahaan;
 use App\Http\Requests\Master\Perusahaan\UpdatePerusahaan;
 use App\Models\Perusahaan;
 use App\Repositories\Master\PerusahaanRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class PerusahaanController extends Controller
 {
@@ -31,7 +31,7 @@ class PerusahaanController extends Controller
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('perusahaan-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('perusahaan-create'),
                 'update' => $user->can('perusahaan-update'),
@@ -103,7 +103,7 @@ class PerusahaanController extends Controller
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }
@@ -113,14 +113,6 @@ class PerusahaanController extends Controller
      */
     public function allData()
     {
-        return response()->json(
-            $this->repository->allData()->map(function ($item) {
-                return [
-                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
-                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
-                ];
-            }),
-            200
-        );
+        return response()->json($this->repository->allData(), 200);
     }
 }

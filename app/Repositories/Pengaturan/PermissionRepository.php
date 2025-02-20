@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Pengaturan;
 
+use App\Http\Resources\LabelValueResource;
 use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
@@ -10,7 +11,7 @@ class PermissionRepository
     public function __construct(protected Permission $model) {}
     public function allData()
     {
-        return $this->model::select('uuid', 'name')->get();
+        return LabelValueResource::collection($this->model::select('uuid', 'name')->get());
     }
     public function data($request)
     {

@@ -29,14 +29,13 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                     <th className="p-2 border w-[1px]">NO</th>
                     <th className="p-2 border">Nama</th>
                     <th className="p-2 border">Singkatan</th>
-                    <th className="p-2 border">Gmt Offset</th>
                     <th className="p-2 border w-1">Aksi</th>
                 </tr>
             </thead>
             <tbody className="font-light">
                 {loading?(
                     <tr>
-                        <td colSpan={5}>
+                        <td colSpan={4}>
                             <div className="flex items-center justify-center">
                                 <Loader2 className="animate-spin me-2" size={18} />Mohon Tunggu...
                             </div>
@@ -48,7 +47,6 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                     <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                     <td className="px-2 py-1 border">{value.nama}</td>
                     <td className="px-2 py-1 border">{value.singkatan}</td>
-                    <td className="px-2 py-1 border">{value.gmt_offset}</td>
                     <td className="border text-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>
@@ -61,7 +59,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                 </tr>
                 )):
                     <tr>
-                        <td colSpan={5}>
+                        <td colSpan={4}>
                             <div className="flex items-center justify-center">
                                 <DatabaseBackup size={18} className='me-2'/> Data tidak ditemukan
                             </div>

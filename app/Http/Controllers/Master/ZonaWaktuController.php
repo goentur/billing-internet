@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\DataRequest;
 use App\Http\Requests\Master\ZonaWaktu\StoreZonaWaktu;
 use App\Http\Requests\Master\ZonaWaktu\UpdateZonaWaktu;
 use App\Models\ZonaWaktu;
 use App\Repositories\Master\ZonaWaktuRepository;
-use Illuminate\Http\Request;
+use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Cache;
 
 class ZonaWaktuController extends Controller implements HasMiddleware
 {
@@ -32,7 +32,7 @@ class ZonaWaktuController extends Controller implements HasMiddleware
     private function gate(): array
     {
         $user = auth()->user();
-        return Cache::remember(__CLASS__ . '\\' . $user->getKey(), config('cache.lifetime.hour'), function () use ($user) {
+        return Memo::forHour('zona-waktu-gate-' . $user->getKey(), function () use ($user) {
             return [
                 'create' => $user->can('zona-waktu-create'),
                 'update' => $user->can('zona-waktu-update'),
@@ -104,7 +104,7 @@ class ZonaWaktuController extends Controller implements HasMiddleware
     /**
      * Resource from storage.
      */
-    public function data(Request $request)
+    public function data(DataRequest $request)
     {
         return response()->json($this->repository->data($request), 200);
     }
@@ -114,14 +114,6 @@ class ZonaWaktuController extends Controller implements HasMiddleware
      */
     public function allData()
     {
-        return response()->json(
-            $this->repository->allData()->map(function ($item) {
-                return [
-                    'value' => $item->id, // Sesuaikan dengan kolom yang digunakan sebagai value
-                    'label' => $item->nama, // Sesuaikan dengan kolom yang digunakan sebagai label
-                ];
-            }),
-            200
-        );
+        return response()->json($this->repository->allData(), 200);
     }
 }
