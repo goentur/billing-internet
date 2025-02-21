@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Common;
 
+use App\Models\Odp;
 use App\Models\Perusahaan;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -28,6 +29,7 @@ class DataPerusahaanRequest extends FormRequest
             'search' => 'nullable|string|max:255',
             'perPage' => 'required|numeric|max:100|min:25',
             'perusahaan' => 'required|string|uuid|' . Rule::exists(Perusahaan::class, 'id'),
+            'odp' => 'nullable|string|uuid|' . Rule::exists(Odp::class, 'id'),
         ];
     }
 }

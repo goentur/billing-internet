@@ -2,7 +2,8 @@
 
 namespace App\Repositories\Master;
 
-use App\Http\Resources\LabelValueResource;
+use App\Http\Resources\Common\LabelValueResource;
+use App\Http\Resources\PaketInternet\PaketInternetResource;
 use App\Models\PaketInternet;
 
 class PaketInternetRepository
@@ -21,7 +22,9 @@ class PaketInternetRepository
             $query->where('nama', 'like', '%' . $request->search . '%')
                 ->orWhere('harga', 'like', '%' . $request->search . '%');
         }
-        return $query->where('perusahaan_id', $request->perusahaan)->latest()->paginate($request->perPage ?? 25);
+        $data = $query->where('perusahaan_id', $request->perusahaan)->latest()->paginate($request->perPage ?? 25);
+        $result = PaketInternetResource::collection($data)->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
     }
 
     public function store($request)

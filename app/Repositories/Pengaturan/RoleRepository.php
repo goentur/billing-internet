@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Pengaturan;
 
-use App\Http\Resources\LabelValueResource;
+use App\Http\Resources\Common\LabelValueResource;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 

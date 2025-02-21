@@ -4,7 +4,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/Components/ui/dropdown-menu";
-import { formatUang } from "@/utils";
 import { BadgeX, DatabaseBackup, Ellipsis, Loader2, Pencil } from 'lucide-react';
 
 type DataTableProps = {
@@ -21,7 +20,6 @@ type DataTableProps = {
     setData: React.Dispatch<React.SetStateAction<any>>;
     setHapus: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
 export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIsEdit,setData,setHapus} : DataTableProps) {
     return (
         <table className="w-full text-left border-collapse border">
@@ -47,7 +45,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-900">
                     <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                     <td className="px-2 py-1 border">{value.nama}</td>
-                    <td className="px-2 py-1 border w-1/4 text-end">{formatUang(value.harga)}</td>
+                    <td className="px-2 py-1 border w-1/4 text-end">{value.harga}</td>
                     <td className="border text-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>

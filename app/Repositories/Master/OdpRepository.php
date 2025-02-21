@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Master;
 
-use App\Http\Resources\LabelValueResource;
+use App\Http\Resources\Common\LabelValueResource;
 use App\Models\Odp;
 use Illuminate\Validation\ValidationException;
 

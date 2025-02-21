@@ -107,7 +107,7 @@ class PaketInternetController extends Controller implements HasMiddleware
      */
     public function data(DataPerusahaanRequest $request)
     {
-        return response()->json($this->repository->data($request), 200);
+        return response()->json($this->repository->data($request));
     }
 
     /**
@@ -115,6 +115,6 @@ class PaketInternetController extends Controller implements HasMiddleware
      */
     public function allData(PerusahaanRequest $request)
     {
-        return response()->json($this->repository->allData($request), 200);
+        return response()->json($this->repository->allData($request));
     }
 }

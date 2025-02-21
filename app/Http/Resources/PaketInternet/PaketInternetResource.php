@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\PaketInternet;
 
+use App\Support\Facades\Helpers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LabelValueResource extends JsonResource
+class PaketInternetResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +16,9 @@ class LabelValueResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'value' => $this->id ?? $this->uuid, // Sesuaikan dengan kolom ID
-            'label' => $this->nama ?? $this->name, // Sesuaikan dengan kolom label
+            'id' => $this->id,
+            'nama' => $this->nama,
+            'harga' => Helpers::ribuan($this->harga),
         ];
     }
 }

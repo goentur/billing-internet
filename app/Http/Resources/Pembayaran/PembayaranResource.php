@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Pembayaran;
 
 use App\Support\Facades\Helpers;
 use App\Support\Facades\Memo;
