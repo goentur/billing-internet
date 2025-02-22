@@ -96,12 +96,12 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setData,setDa
                     dataTable.length > 0 ? dataTable.map((value : any,index:number) => (
                     <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-900">
                         <td className="px-2 py-1 border text-center">{dataInfo.from+index}</td>
-                        <td className="px-2 py-1 border">{value.odp?.nama}</td>
+                        <td className="px-2 py-1 border">{value.odp}</td>
                         <td className="px-2 py-1 border">{value.nama}</td>
                         <td className="px-2 py-1 border">{value.tanggal_bayar}</td>
                         <td className="px-2 py-1 border">{value.telp}</td>
                         <td className="px-2 py-1 border">{value.alamat}</td>
-                        <td className="px-2 py-1 border">{value.paket_internet?.nama}</td>
+                        <td className="px-2 py-1 border">{value.paket_internet}</td>
                     </tr>
                     )):
                         <tr>

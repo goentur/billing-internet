@@ -3,6 +3,7 @@
 namespace App\Repositories\Master;
 
 use App\Http\Resources\Common\LabelValueResource;
+use App\Http\Resources\ZonaWaktu\ZonaWaktuResource;
 use App\Models\ZonaWaktu;
 use App\Repositories\BaseRepository;
 
@@ -23,6 +24,7 @@ class ZonaWaktuRepository extends BaseRepository
             $query->where('nama', 'like', '%' . $request->search . '%')
                 ->orWhere('singkatan', 'like', '%' . $request->search . '%');
         }
-        return $query->latest()->paginate($request->perPage ?? 25);
+        $result = ZonaWaktuResource::collection($query->latest()->paginate($request->perPage ?? 25))->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
     }
 }

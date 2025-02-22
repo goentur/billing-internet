@@ -28,7 +28,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                 <thead>
                     <tr className="uppercase text-sm leading-normal">
                         <th className="p-2 border w-[1px]">NO</th>
-                        <th className="p-2 border">Email</th>
+                        <th className="p-2 border w-[1px]">Email</th>
                         <th className="p-2 border">Nama</th>
                         <th className="p-2 border">Zona Waktu</th>
                         <th className="p-2 border w-1">Aksi</th>
@@ -49,7 +49,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                         <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                         <td className="px-2 py-1 border">{value.email}</td>
                         <td className="px-2 py-1 border">{value.name}</td>
-                        <td className="px-2 py-1 border">{value.zona_waktu?.singkatan}</td>
+                        <td className="px-2 py-1 border">{value.zona_waktu}</td>
                         <td className="border text-center">
                             <DropdownMenu>
                                 <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>

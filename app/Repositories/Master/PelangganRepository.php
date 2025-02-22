@@ -3,6 +3,7 @@
 namespace App\Repositories\Master;
 
 use App\Http\Resources\Common\LabelValueResource;
+use App\Http\Resources\Pelanggan\PelangganResource;
 use App\Models\Pelanggan;
 
 class PelangganRepository
@@ -28,7 +29,8 @@ class PelangganRepository
         if ($request->odp) {
             $query->where('odp_id', $request->odp);
         }
-        return $query->where('perusahaan_id', $request->perusahaan)->latest()->paginate($request->perPage ?? 25);
+        $result = PelangganResource::collection($query->where('perusahaan_id', $request->perusahaan)->latest()->paginate($request->perPage ?? 25))->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
     }
 
     public function store($request)

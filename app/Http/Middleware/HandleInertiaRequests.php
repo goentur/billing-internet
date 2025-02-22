@@ -31,7 +31,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $authData = Memo::forHour(__CLASS__ . '\\' . $request->user()?->id, function () use ($request) {
+        $authData = Memo::forHour('share-data-' . $request->user()?->id, function () use ($request) {
             $user = $request->user();
             $perusahaan = $user?->perusahaan[0] ?? null;
 

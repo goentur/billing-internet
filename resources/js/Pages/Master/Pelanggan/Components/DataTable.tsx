@@ -29,8 +29,8 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                     <th className="p-2 border w-[1px]">NO</th>
                     <th className="p-2 border">ODP</th>
                     <th className="p-2 border">Nama</th>
-                    <th className="p-2 border">Tanggal</th>
-                    <th className="p-2 border">Telp</th>
+                    <th className="p-2 border w-[1px]">Tanggal</th>
+                    <th className="p-2 border w-[1px]">Telp</th>
                     <th className="p-2 border">Alamat</th>
                     <th className="p-2 border">Paket Internet</th>
                     <th className="p-2 border w-1">Aksi</th>
@@ -49,12 +49,12 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                 dataTable.length > 0 ? dataTable.map((value : any,index:number) => (
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-900">
                     <td className="px-2 py-1 border text-center">{dataInfo++}</td>
-                    <td className="px-2 py-1 border">{value.odp?.nama}</td>
+                    <td className="px-2 py-1 border">{value.odp}</td>
                     <td className="px-2 py-1 border">{value.nama}</td>
                     <td className="px-2 py-1 border">{value.tanggal_bayar}</td>
                     <td className="px-2 py-1 border">{value.telp}</td>
                     <td className="px-2 py-1 border">{value.alamat}</td>
-                    <td className="px-2 py-1 border">{value.paket_internet?.nama}</td>
+                    <td className="px-2 py-1 border">{value.paket_internet}</td>
                     <td className="border text-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>

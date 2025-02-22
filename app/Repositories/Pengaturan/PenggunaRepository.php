@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Pengaturan;
 
+use App\Http\Resources\Pengguna\PenggunaResource;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -19,12 +20,15 @@ class PenggunaRepository
     }
     public function data($request)
     {
-        return $this->model::select('id', 'zona_waktu_id', 'name', 'email')
+        $data = $this->model::select('id', 'zona_waktu_id', 'name', 'email')
             ->with(['zonaWaktu'])
             ->when($request->search, $this->applySearchFilter($request))
             ->whereHas('roles', fn($q) => $q->where('name', 'DEVELOPER'))
             ->latest()
             ->paginate($request->perPage ?? 25);
+
+        $result = PenggunaResource::collection($data)->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
     }
     public function store($request)
     {

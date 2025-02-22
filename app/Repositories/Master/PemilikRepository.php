@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Master;
 
+use App\Http\Resources\Pemilik\PemilikResource;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -20,12 +21,14 @@ class PemilikRepository
     }
     public function data($request)
     {
-        return $this->model::select('id', 'zona_waktu_id', 'name', 'email')
+        $data = $this->model::select('id', 'zona_waktu_id', 'name', 'email')
             ->with(['zonaWaktu', 'perusahaan'])
             ->when($request->search, $this->applySearchFilter($request))
             ->whereHas('roles', fn($q) => $q->where('name', 'PEMILIK'))
             ->latest()
             ->paginate($request->perPage ?? 25);
+        $result = PemilikResource::collection($data)->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
     }
     public function store($request)
     {

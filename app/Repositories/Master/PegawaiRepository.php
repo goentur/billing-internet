@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Master;
 
+use App\Http\Resources\Pegawai\PegawaiResource;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -20,13 +21,15 @@ class PegawaiRepository
     }
     public function data($request)
     {
-        return $this->model::select('id', 'zona_waktu_id', 'name', 'email')
+        $data = $this->model::select('id', 'zona_waktu_id', 'name', 'email')
             ->with(['zonaWaktu'])
             ->when($request->search, $this->applySearchFilter($request))
             ->whereHas('perusahaan', fn($q) => $q->where('id', $request->perusahaan))
             ->whereHas('roles', fn($q) => $q->where('name', 'PEGAWAI'))
             ->latest()
             ->paginate($request->perPage ?? 25);
+        $result = PegawaiResource::collection($data)->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
     }
     public function store($request)
     {

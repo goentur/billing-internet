@@ -52,13 +52,8 @@ export default function DataTable({gate, loading,dataTable,dataInfo,setForm,setI
                         <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                         <td className="px-2 py-1 border">{value.email}</td>
                         <td className="px-2 py-1 border">{value.name}</td>
-                        <td className="px-2 py-1 border">{value.zona_waktu?.singkatan}</td>
-                        <td className="px-2 py-1 border">
-                            { value.perusahaan.map((p:any) => (
-                                    <Badge variant={"outline"} key={p.id} className="me-1 mb-1">{p.nama}</Badge>
-                                )) 
-                            }
-                        </td>
+                        <td className="px-2 py-1 border">{value.zona_waktu}</td>
+                        <td className="px-2 py-1 border"><Badge variant={"outline"} className="me-1 mb-1">{value.perusahaan}</Badge></td>
                         <td className="border text-center">
                             <DropdownMenu>
                                 <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>

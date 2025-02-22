@@ -21,12 +21,11 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
-    const { setData, post, processing, errors } = useForm({
+    const { setData, data, post, processing, errors } = useForm({
         email: '',
         password: '',
         remember: false,
     });
-
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('login'));
@@ -91,7 +90,11 @@ export default function Login({
                                     <Checkbox
                                         id="remember"
                                         name="remember"
-                                        onChange={(e:any) => setData('remember', e.target.checked)}
+                                        checked={data.remember ?? false}
+                                        onCheckedChange={(checked: boolean) => setData((prevData: any) => ({
+                                            ...prevData,
+                                            remember: checked,
+                                        }))}
                                     />
                                     <label htmlFor="remember" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >Ingat saya</label>

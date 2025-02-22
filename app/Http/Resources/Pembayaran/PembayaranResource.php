@@ -21,9 +21,9 @@ class PembayaranResource extends JsonResource
         $timezone = Memo::forDay('user-timezone-' . Auth::id(), fn() => Auth::user()?->zonaWaktu->nama ?? 'UTC');
         return [
             'id' => $this->id,
-            'user' => $this->when(!blank($this->user), Memo::for10min('pembayaran-user-' . $this->user_id, fn() => $this->user->name)),
-            'pelanggan' => $this->when(!blank($this->pelanggan), Memo::for10min('pembayaran-pelanggan-' . $this->pelanggan_id, fn() => $this->pelanggan->nama)),
-            'paket_internet' => $this->when(!blank($this->paketInternet), Memo::for10min('pembayaran-paket-internet-' . $this->paketInternet_id, fn() => $this->paketInternet->nama)),
+            'user' => $this->when(!blank($this->user), Memo::for10min('user-' . $this->user_id, fn() => $this->user->name)),
+            'pelanggan' => $this->when(!blank($this->pelanggan), Memo::for10min('pelanggan-' . $this->pelanggan_id, fn() => $this->pelanggan->nama)),
+            'paket_internet' => $this->when(!blank($this->paketInternet), Memo::for10min('paket-internet-' . $this->paketInternet_id, fn() => $this->paketInternet->nama)),
             'tanggal_pembayaran' => $this->convertToTimezone($this->tanggal_pembayaran, $timezone),
             'tanggal_transaksi' => $this->convertToTimezone($this->tanggal_transaksi, $timezone),
             'total' => Helpers::ribuan($this->total),
