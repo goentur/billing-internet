@@ -16,7 +16,7 @@ class LabelValueResource extends JsonResource
     {
         return [
             'value' => $this->id ?? $this->uuid, // Sesuaikan dengan kolom ID
-            'label' => $this->nama ?? $this->name, // Sesuaikan dengan kolom label
+            'label' => $this->nama . (blank($this->alamat) ? '' : ' - ' . $this->alamat) ?? $this->name, // Sesuaikan dengan kolom label
         ];
     }
 }

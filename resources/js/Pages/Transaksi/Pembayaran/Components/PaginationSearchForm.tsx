@@ -38,7 +38,7 @@ export default function PaginationSearchForm({gate,tanggal,setDataInfo,setForm,r
                     </Select>
                 </div>
                 <form className="flex items-center gap-4">
-                    <SelectDateMonth value={tanggal} onChange={(e:any) =>  setDataInfo((prev:any) => ({ ...prev, tanggal: e, currentPage: 1 }))}/>
+                    <SelectDateMonth hide={true} value={tanggal} onChange={(e:any) =>  setDataInfo((prev:any) => ({ ...prev, tanggal: e, currentPage: 1 }))}/>
                     <Input
                         id="cari"
                         name="cari"

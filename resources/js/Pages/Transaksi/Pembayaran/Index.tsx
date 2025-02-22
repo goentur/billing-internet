@@ -1,19 +1,9 @@
 import PaginationControls from '@/Components/PaginationControls';
-import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Input } from '@/Components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { alertApp } from '@/utils';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import axios from 'axios';
-import { Plus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import DataTable from './Components/DataTable';
 import FormDialog from './Components/FormDialog';
@@ -45,8 +35,8 @@ export default function Index({gate}:indexProps) {
     const { data, setData, errors, post, reset, processing } = useForm({
         id: '',
         perusahaan: perusahaan?.id,
-        nama: '',
-        harga: '',
+        pelanggan: '',
+        bulan_pembayaran: '',
     });
     useEffect(() => {
         getData();
@@ -119,11 +109,11 @@ export default function Index({gate}:indexProps) {
                 </CardHeader>
                 <CardContent>
                     <PaginationSearchForm gate={gate} tanggal={dataInfo.tanggal} setDataInfo={setDataInfo} setForm={setForm} reset={reset}/>
-                    <DataTable loading={loading} dataTable={dataTable} dataInfo={dataInfo.from} />
+                    <DataTable loading={loading} dataTable={dataTable} />
                     <PaginationControls dataInfo={dataInfo} setDataInfo={setDataInfo} linksPagination={linksPagination} />
                 </CardContent>
             </Card>
-            <FormDialog open={form} setOpen={setForm} judul={judul} data={data} setData={setData} errors={errors} formRefs={formRefs} processing={processing} simpanAtauUbah={handleSubmit} />
+            <FormDialog open={form} setOpen={setForm} judul={judul} data={data} setData={setData} errors={errors} processing={processing} simpan={handleSubmit} dataPelanggan={dataPelanggan}/>
         </AuthenticatedLayout>
     );
 }

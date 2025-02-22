@@ -12,7 +12,7 @@ class PelangganRepository
 
     public function allData($request)
     {
-        return LabelValueResource::collection($this->model::select('id', 'nama')->where('perusahaan_id', $request->perusahaan)->get());
+        return LabelValueResource::collection($this->model::select('id', 'nama', 'alamat')->where('perusahaan_id', $request->perusahaan)->get());
     }
 
     public function data($request)

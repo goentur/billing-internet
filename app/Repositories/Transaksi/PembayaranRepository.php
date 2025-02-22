@@ -2,10 +2,14 @@
 
 namespace App\Repositories\Transaksi;
 
+use App\Enums\PembayaranStatus;
 use App\Http\Resources\Pembayaran\PembayaranResource;
+use App\Models\Pelanggan;
 use App\Models\Pembayaran;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class PembayaranRepository
 {
@@ -34,9 +38,54 @@ class PembayaranRepository
         $result = PembayaranResource::collection($transaksi)->response()->getData(true);
         return $result['meta'] + ['data' => $result['data']];
     }
-
-    public function store()
+    public function store($request)
     {
-        return $this->model::select('uuid', 'name')->get();
+        try {
+            DB::beginTransaction();
+
+            // Ambil data pelanggan
+            $pelanggan = Pelanggan::with('paketInternet')
+            ->select('id', 'paket_internet_id', 'tanggal_bayar')
+            ->findOrFail($request->pelanggan);
+
+            // Konversi bulan_pembayaran ke timestamp awal dan akhir bulan
+            $startOfMonth = Carbon::parse($request->bulan_pembayaran)->startOfMonth()->timestamp;
+            $endOfMonth = Carbon::parse($request->bulan_pembayaran)->endOfMonth()->timestamp;
+
+            // Cek apakah pembayaran sudah ada untuk pelanggan ini di bulan tersebut
+            $existingPayment = $this->model
+                ->where('pelanggan_id', $pelanggan->id)
+                ->whereBetween('tanggal_pembayaran', [$startOfMonth, $endOfMonth])
+                ->exists();
+
+            if ($existingPayment) {
+                throw ValidationException::withMessages([
+                    'pelanggan' => 'Pelanggan sudah membayar pada bulan yang dipilih.',
+                ]);
+            }
+            // Set tanggal pembayaran dalam UTC
+            $tanggalPembayaran = Carbon::parse($request->bulan_pembayaran . '-' . $pelanggan->tanggal_bayar . ' ' . date('H:i:s'))->timestamp;
+            // Buat data pembayaran baru
+            $this->model->create([
+                'user_id' => Auth::id(),
+                'perusahaan_id' => $request->perusahaan,
+                'pelanggan_id' => $request->pelanggan,
+                'paket_internet_id' => $pelanggan->paket_internet_id,
+                'tanggal_pembayaran' => $tanggalPembayaran,
+                'tanggal_transaksi' => time(),
+                'total' => $pelanggan->paketInternet->harga,
+                'status' => PembayaranStatus::SELESAI,
+            ]);
+
+            DB::commit();
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            throw $e; // Lempar kembali error validasi
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw ValidationException::withMessages([
+                'pelanggan' => 'Terjadi kesalahan saat penyimpanan data, silakan ulangi lagi.',
+            ]);
+        }
     }
 }

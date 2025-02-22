@@ -19,11 +19,12 @@ import {
 import { monthNames } from "@/utils";
 
 type Props = {
+  hide: boolean;
   value: string | null;
   onChange: (value: string) => void;
 };
 
-const SelectDateMonth: React.FC<Props> = ({ value, onChange }) => {
+const SelectDateMonth: React.FC<Props> = ({ hide = false, value, onChange }) => {
   const [open, setOpen] = React.useState(false);
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -50,15 +51,15 @@ const SelectDateMonth: React.FC<Props> = ({ value, onChange }) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between hidden md:flex"
+          className={`w-full justify-between ${hide ? 'hidden md:flex' : ''}`}
         >
-          {value ? options.find((opt) => opt.value === value)?.label : "Pilih bulan dan tahun"}
+          {value ? options.find((opt) => opt.value === value)?.label : "Pilih tahun bulan"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0">
         <Command className="w-full">
-          <CommandInput placeholder="Cari bulan dan tahun" className="h-9" />
+          <CommandInput placeholder="Cari tahun bulan" className="h-9" />
           <CommandList>
             <CommandEmpty>Data tidak ditemukan.</CommandEmpty>
             <CommandGroup>

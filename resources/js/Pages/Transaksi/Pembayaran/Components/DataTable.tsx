@@ -4,9 +4,8 @@ import { DatabaseBackup, Loader2, PrinterIcon } from 'lucide-react';
 type DataTableProps = {
     loading: boolean;
     dataTable: [];
-    dataInfo: number;
 };
-export default function DataTable({loading,dataTable,dataInfo} : DataTableProps) {
+export default function DataTable({loading,dataTable} : DataTableProps) {
     return (
         <>
             {}
@@ -16,6 +15,7 @@ export default function DataTable({loading,dataTable,dataInfo} : DataTableProps)
                         <th rowSpan={2} className="px-2 border w-[1px] table-cell">AKSI</th>
                         <th rowSpan={2} className="px-2 border hidden md:table-cell">Pegawai</th>
                         <th rowSpan={2} className="px-2 border table-cell">Pelanggan</th>
+                        <th rowSpan={2} className="px-2 border table-cell">Alamat</th>
                         <th rowSpan={2} className="px-2 border hidden md:table-cell">Paket Internet</th>
                         <th colSpan={2} className="px-2 border hidden md:table-cell">Tanggal</th>
                         <th rowSpan={2} className="px-2 border w-[1px] hidden md:table-cell">Total</th>
@@ -41,6 +41,7 @@ export default function DataTable({loading,dataTable,dataInfo} : DataTableProps)
                         <td className="px-2 py-1 border text-center"><Button size={'sm'}><PrinterIcon/></Button></td>
                         <td className="px-2 py-1 border hidden md:table-cell">{value.user}</td>
                         <td className="px-2 py-1 border">{value.pelanggan}</td>
+                        <td className="px-2 py-1 border">{value.alamat}</td>
                         <td className="px-2 py-1 border hidden md:table-cell">{value.paket_internet}</td>
                         <td className="px-2 py-1 border hidden md:table-cell">
                             <span>{value?.tanggal_pembayaran?.tanggal}</span>

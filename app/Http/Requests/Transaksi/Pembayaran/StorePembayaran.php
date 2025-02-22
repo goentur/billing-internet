@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Transaksi\Pembayaran;
 
+use App\Models\Pelanggan;
+use App\Models\Perusahaan;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePembayaran extends FormRequest
 {
@@ -22,9 +25,9 @@ class StorePembayaran extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|string|max:255',
-            'singkatan' => 'required|string|max:255',
-            'gmt_offset' => 'required|numeric',
+            'perusahaan' => 'required|string|uuid|' . Rule::exists(Perusahaan::class, 'id'),
+            'pelanggan' => 'required|string|uuid|' . Rule::exists(Pelanggan::class, 'id'),
+            'bulan_pembayaran' => 'required|string|max:255',
         ];
     }
 }
