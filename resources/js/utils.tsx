@@ -19,3 +19,8 @@ export const formatUang = (angka:string) => {
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
+export const monthNames = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
+

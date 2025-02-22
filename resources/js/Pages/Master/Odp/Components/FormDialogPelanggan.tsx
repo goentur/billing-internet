@@ -137,8 +137,8 @@ export default function FormDialogPelanggan({open,setOpen,data,setData,errors,fo
                                     <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-full p-0">
-                                    <Command>
+                                <PopoverContent className="p-0">
+                                    <Command className="w-full">
                                         <CommandInput placeholder="Cari paket internet..." className="h-9" />
                                         <CommandList>
                                             <CommandEmpty>Paket internet tidak ada.</CommandEmpty>

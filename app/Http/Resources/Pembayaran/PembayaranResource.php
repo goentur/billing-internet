@@ -36,8 +36,10 @@ class PembayaranResource extends JsonResource
      */
     private function convertToTimezone($timestamp, $timezone)
     {
-        return Carbon::createFromTimestamp($timestamp, 'UTC')
-            ->setTimezone($timezone)
-            ->format('Y-m-d H:i:s');
+        $date = Carbon::createFromTimestamp($timestamp, 'UTC')->setTimezone($timezone);
+        return [
+            'tanggal' => $date->format('Y-m-d'),
+            'jam' => $date->format('H:i:s'),
+        ];
     }
 }

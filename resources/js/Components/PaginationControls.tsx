@@ -34,7 +34,7 @@ export default function PaginationControls({
 }: PaginationControlsProps) {
     return (
         <div className="flex justify-between items-center mt-4">
-            <span className="text-sm">
+            <span className="text-sm hidden md:block">
                 Menampilkan {dataInfo.from??0} sampai {dataInfo.to??0} dari {dataInfo.totalRecords} data
             </span>
             <div className="flex items-center space-x-1">

@@ -59,6 +59,6 @@ class PembayaranController extends Controller implements HasMiddleware
      */
     public function data(DataPembayaran $request)
     {
-        return response()->json($this->repository->data($request->perusahaan), 200);
+        return response()->json($this->repository->data($request), 200);
     }
 }

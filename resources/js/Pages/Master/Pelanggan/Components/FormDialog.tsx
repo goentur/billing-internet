@@ -140,8 +140,8 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                                     <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-full p-0">
-                                    <Command>
+                                <PopoverContent className="p-0">
+                                    <Command className="w-full">
                                         <CommandInput placeholder="Cari odp..." className="h-9" />
                                         <CommandList>
                                             <CommandEmpty>Odp tidak ada.</CommandEmpty>
@@ -187,8 +187,8 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                                     <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-full p-0">
-                                    <Command>
+                                <PopoverContent className="p-0">
+                                    <Command className="w-full">
                                         <CommandInput placeholder="Cari paket internet..." className="h-9" />
                                         <CommandList>
                                             <CommandEmpty>Paket internet tidak ada.</CommandEmpty>

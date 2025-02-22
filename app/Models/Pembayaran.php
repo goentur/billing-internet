@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pembayaran extends Model
 {
     use HasUuids;
-    protected $fillable = ['user_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status'];
+    protected $fillable = ['user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status'];
 
     protected $casts = [
         'status' => PembayaranStatus::class,

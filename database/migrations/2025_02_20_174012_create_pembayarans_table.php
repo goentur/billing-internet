@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pembayarans', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable()->comment('id user');
+            $table->uuid('perusahaan_id')->nullable()->comment('id perusahaan');
             $table->uuid('pelanggan_id')->nullable()->comment('id pelanggan');
             $table->uuid('paket_internet_id')->nullable()->comment('id paket internet');
             $table->bigInteger('tanggal_pembayaran')->nullable();
