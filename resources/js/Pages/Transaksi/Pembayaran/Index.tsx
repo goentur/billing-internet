@@ -33,7 +33,6 @@ type DataPrintType = {
 };
 
 export default function Index({ gate }: indexProps) {
-	const contentRef = useRef(null);
     const { perusahaan }: any = usePage().props.auth;
     const judul = 'Pembayaran';
     const [form, setForm] = useState(false);

@@ -24,7 +24,7 @@ class CetakDataPembayaran extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|string|' . Rule::exists(Pembayaran::class, 'id'),
+            'id' => 'required|string|uuid|' . Rule::exists(Pembayaran::class, 'id'),
         ];
     }
 }

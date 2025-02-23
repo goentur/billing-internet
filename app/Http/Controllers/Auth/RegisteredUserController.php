@@ -15,6 +15,10 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
+    public function __construct()
+    {
+        abort(404);
+    }
     /**
      * Display the registration view.
      */

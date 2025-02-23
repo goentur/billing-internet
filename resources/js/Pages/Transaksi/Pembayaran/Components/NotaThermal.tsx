@@ -33,7 +33,7 @@ export default function NotaThermal({ dataPrint , setDataPrint }: DataPrintType)
 			{ dataPrint && Object.keys(dataPrint).length > 0 && (
 				<>
 					<div className="flex flex-col items-center">
-						<div ref={contentRef} className="w-[80mm] p-2 font-mono">
+						<div ref={contentRef} className="w-[80mm] p-0 m-0 font-mono">
 							<div className="text-center">
 								<Globe size={30} className="mx-auto mb-1" />
 								<h1 className="font-bold text-lg uppercase">{appName}</h1>
@@ -44,7 +44,7 @@ export default function NotaThermal({ dataPrint , setDataPrint }: DataPrintType)
 								<tbody>
 									<tr>
 										<td colSpan={3} className='text-center m-0 p-0'>
-											-------------------------------------------
+											---------------------------------------------
 										</td>
 									</tr>
 									<tr>
@@ -59,7 +59,7 @@ export default function NotaThermal({ dataPrint , setDataPrint }: DataPrintType)
 									</tr>
 									<tr>
 										<td colSpan={3} className='text-center'>
-                                            -------------------------------------------
+                                            ---------------------------------------------
 										</td>
 									</tr>
 								</tbody>
@@ -113,7 +113,7 @@ export default function NotaThermal({ dataPrint , setDataPrint }: DataPrintType)
 									</tr>
 									<tr>
 										<td colSpan={3} className='text-center m-0 p-0'>
-                                            -------------------------------------------
+                                            ---------------------------------------------
 										</td>
 									</tr>
 								</tbody>
