@@ -48,6 +48,7 @@
         "ol": "^10.4.0",
         "react-day-picker": "^8.10.1",
         "react-number-format": "^5.4.3",
+        "react-to-print": "^3.0.5",
         "tailwind-merge": "^2.5.5",
         "tailwindcss-animate": "^1.0.7"
     }

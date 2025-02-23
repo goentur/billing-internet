@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Transaksi;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Transaksi\Pembayaran\CetakDataPembayaran;
 use App\Http\Requests\Transaksi\Pembayaran\DataPembayaran;
 use App\Http\Requests\Transaksi\Pembayaran\StorePembayaran;
 use App\Repositories\Transaksi\PembayaranRepository;
 use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 
 class PembayaranController extends Controller implements HasMiddleware
 {
@@ -59,6 +59,14 @@ class PembayaranController extends Controller implements HasMiddleware
      */
     public function data(DataPembayaran $request)
     {
-        return response()->json($this->repository->data($request), 200);
+        return response()->json($this->repository->data($request));
+    }
+
+    /**
+     * Get resource from storage for print.
+     */
+    public function cetakData(CetakDataPembayaran $request)
+    {
+        return response()->json($this->repository->cetakData($request));
     }
 }

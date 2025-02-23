@@ -7,20 +7,39 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import DataTable from './Components/DataTable';
 import FormDialog from './Components/FormDialog';
+import NotaThermal from './Components/NotaThermal';
 import PaginationSearchForm from './Components/PaginationSearchForm';
 
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
 type indexProps = {
-    gate: {
-        create : boolean,
-    };  
+    gate: { create: boolean };
 };
-export default function Index({gate}:indexProps) {
-    const { perusahaan } : any = usePage().props.auth;
-    const judul = "Pembayaran";
+
+type DataPrintType = {
+    user?: string;
+    perusahaan?: {
+		nama : string,
+		alamat : string
+	};
+    pelanggan?: {
+		nama : string,
+		alamat : string
+	};
+    paket_internet?: string;
+    tanggal_pembayaran?: string;
+    tanggal_transaksi?: string;
+    total?: string;
+};
+
+export default function Index({ gate }: indexProps) {
+	const contentRef = useRef(null);
+    const { perusahaan }: any = usePage().props.auth;
+    const judul = 'Pembayaran';
     const [form, setForm] = useState(false);
-    const formRefs = useRef<Record<string, HTMLInputElement | null>>({});
     const [loading, setLoading] = useState(false);
     const [dataTable, setDataTable] = useState<[]>([]);
+    const [dataPrint, setDataPrint] = useState<DataPrintType | null>(null);
     const [linksPagination, setLinksPagination] = useState([]);
     const [dataPelanggan, setDataPelanggan] = useState<[]>([]);
     const [dataInfo, setDataInfo] = useState({
@@ -30,17 +49,20 @@ export default function Index({gate}:indexProps) {
         totalRecords: 0,
         perPage: 25,
         search: null,
-        tanggal: null
+        tanggal: null,
     });
+
     const { data, setData, errors, post, reset, processing } = useForm({
         id: '',
         perusahaan: perusahaan?.id,
         pelanggan: '',
         bulan_pembayaran: '',
     });
+
     useEffect(() => {
         getData();
     }, [dataInfo.currentPage, dataInfo.search, dataInfo.perPage, dataInfo.tanggal]);
+
     useEffect(() => {
         getDataPelanggan();
     }, []);
@@ -65,26 +87,28 @@ export default function Index({gate}:indexProps) {
                 totalRecords: response.data.total,
                 perPage: response.data.per_page,
             }));
-        } catch (error:any) {
+        } catch (error: any) {
             alertApp(error.message, 'error');
         } finally {
             setLoading(false);
         }
     };
+
     const getDataPelanggan = async () => {
         try {
             const response = await axios.post(route('master.pelanggan.all-data'), {
-                perusahaan: perusahaan?.id
+                perusahaan: perusahaan?.id,
             });
             setDataPelanggan(response.data);
-        } catch (error:any) {
+        } catch (error: any) {
             alertApp(error.message, 'error');
         }
     };
+	
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('transaksi.pembayaran.store'), {
-            preserveScroll: true,
+			preserveScroll: true,
             onSuccess: (e) => {
                 setForm(false);
                 reset();
@@ -92,14 +116,21 @@ export default function Index({gate}:indexProps) {
                 getData();
             },
             onError: (e) => {
-                const firstErrorKey = Object.keys(e)[0];
-                if (firstErrorKey) {
-                    formRefs.current[firstErrorKey]?.focus();
-                }
+				alertApp(e, 'error');
             },
         });
     };
-    
+
+    const handleGetDataPrint = async (id: string) => {
+        if (!id) return;
+        try {
+            const response = await axios.post(route('transaksi.pembayaran.cetak-data'), { id });
+            setDataPrint(response.data);
+        } catch (error: any) {
+            alertApp(error.message, 'error');
+        }
+    };
+
     return (
         <AuthenticatedLayout header={judul}>
             <Head title={judul} />
@@ -108,12 +139,19 @@ export default function Index({gate}:indexProps) {
                     <CardTitle className="text-xl">{judul}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <PaginationSearchForm gate={gate} tanggal={dataInfo.tanggal} setDataInfo={setDataInfo} setForm={setForm} reset={reset}/>
-                    <DataTable loading={loading} dataTable={dataTable} />
+                    <PaginationSearchForm
+                        gate={gate}
+                        tanggal={dataInfo.tanggal}
+                        setDataInfo={setDataInfo}
+                        setForm={setForm}
+                        reset={reset}
+                    />
+                    <DataTable loading={loading} dataTable={dataTable} setData={setData} setPrint={handleGetDataPrint} />
                     <PaginationControls dataInfo={dataInfo} setDataInfo={setDataInfo} linksPagination={linksPagination} />
                 </CardContent>
             </Card>
-            <FormDialog open={form} setOpen={setForm} judul={judul} data={data} setData={setData} errors={errors} processing={processing} simpan={handleSubmit} dataPelanggan={dataPelanggan}/>
+            <FormDialog open={form} setOpen={setForm} judul={judul} data={data} setData={setData} errors={errors} processing={processing} simpan={handleSubmit} dataPelanggan={dataPelanggan} />
+            <NotaThermal dataPrint={dataPrint} setDataPrint={setDataPrint}/>
         </AuthenticatedLayout>
     );
 }

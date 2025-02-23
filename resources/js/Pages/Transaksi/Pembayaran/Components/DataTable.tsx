@@ -4,8 +4,10 @@ import { DatabaseBackup, Loader2, PrinterIcon } from 'lucide-react';
 type DataTableProps = {
     loading: boolean;
     dataTable: [];
+    setData: React.Dispatch<React.SetStateAction<any>>;
+    setPrint: (id : string) => void;
 };
-export default function DataTable({loading,dataTable} : DataTableProps) {
+export default function DataTable({loading,dataTable,setData,setPrint} : DataTableProps) {
     return (
         <>
             {}
@@ -38,7 +40,7 @@ export default function DataTable({loading,dataTable} : DataTableProps) {
                     ):
                     dataTable.length > 0 ? dataTable.map((value : any,index:number) => (
                     <tr key={index} className="hover:bg-gray-100 text-sm align-top dark:hover:bg-slate-900">
-                        <td className="px-2 py-1 border text-center"><Button size={'sm'}><PrinterIcon/></Button></td>
+                        <td className="px-2 py-1 border text-center"><Button size={'sm'} onClick={() => {setPrint(value.id)}}><PrinterIcon/></Button></td>
                         <td className="px-2 py-1 border hidden md:table-cell">{value.user}</td>
                         <td className="px-2 py-1 border">{value.pelanggan}</td>
                         <td className="px-2 py-1 border">{value.alamat}</td>

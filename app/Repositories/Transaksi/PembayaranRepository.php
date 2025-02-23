@@ -3,6 +3,7 @@
 namespace App\Repositories\Transaksi;
 
 use App\Enums\PembayaranStatus;
+use App\Http\Resources\Pembayaran\CetakPembayaranResource;
 use App\Http\Resources\Pembayaran\PembayaranResource;
 use App\Models\Pelanggan;
 use App\Models\Pembayaran;
@@ -87,5 +88,10 @@ class PembayaranRepository
                 'pelanggan' => 'Terjadi kesalahan saat penyimpanan data, silakan ulangi lagi.',
             ]);
         }
+    }
+    public function cetakData($request)
+    {
+        return new CetakPembayaranResource($this->model::select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total')
+        ->findOrFail($request->id));
     }
 }

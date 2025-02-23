@@ -83,6 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::middleware('can:pembayaran-index')->group(function () {
                 Route::get('/', [PembayaranController::class, 'index'])->name('index');
                 Route::post('data', [PembayaranController::class, 'data'])->name('data');
+                Route::post('cetak-data', [PembayaranController::class, 'cetakData'])->name('cetak-data');
             });
             Route::middleware('can:pembayaran-create')->post('store', [PembayaranController::class, 'store'])->name('store');
         });

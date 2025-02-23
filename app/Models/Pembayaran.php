@@ -20,6 +20,11 @@ class Pembayaran extends Model
         return $this->belongsTo(User::class);
     }
 
+    function perusahaan()
+    {
+        return $this->belongsTo(Perusahaan::class);
+    }
+
     function pelanggan()
     {
         return $this->belongsTo(Pelanggan::class);
