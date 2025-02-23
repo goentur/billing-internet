@@ -99,7 +99,7 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,proce
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="bulan_pembayaran" className={clsx({ "text-red-500": errors.bulan_pembayaran }, "capitalize")}>Bulan pembayaran</Label>
-                            <SelectDateMonth hide value={data.bulan_pembayaran} onChange={(e:any) =>  setData((prev:any) => ({ ...prev, bulan_pembayaran: e}))}/>
+                            <SelectDateMonth hide={false} value={data.bulan_pembayaran} onChange={(e:any) =>  setData((prev:any) => ({ ...prev, bulan_pembayaran: e}))}/>
                             {errors.bulan_pembayaran && <div className="text-red-500 text-xs mt-0">{errors.bulan_pembayaran}</div>}
                         </div>
                     </DialogDescription>
