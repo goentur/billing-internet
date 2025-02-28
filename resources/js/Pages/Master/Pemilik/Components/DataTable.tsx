@@ -47,18 +47,17 @@ export default function DataTable({gate, loading,dataTable,dataInfo,setForm,setI
                         </tr>
                     ):
                     dataTable.length > 0 ? dataTable.map((value : any,index:number) => (
-                        
                     <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-900">
                         <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                         <td className="px-2 py-1 border">{value.email}</td>
                         <td className="px-2 py-1 border">{value.name}</td>
-                        <td className="px-2 py-1 border">{value.zona_waktu}</td>
-                        <td className="px-2 py-1 border"><Badge variant={"outline"} className="me-1 mb-1">{value.perusahaan}</Badge></td>
+                        <td className="px-2 py-1 border">{value?.zona_waktu?.nama}</td>
+                        <td className="px-2 py-1 border"><Badge variant={"outline"} className="me-1 mb-1">{value.perusahaan.nama}</Badge></td>
                         <td className="border text-center">
                             <DropdownMenu>
                                 <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, email:value.email, nama:value.name, zona_waktu:value.zona_waktu_id, perusahaan:value.perusahaan[0]['id']})}}><Pencil/> Ubah</DropdownMenuItem>}
+                                    {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, email:value.email, nama:value.name, zona_waktu:value?.zona_waktu?.id, perusahaan:value.perusahaan.id})}}><Pencil/> Ubah</DropdownMenuItem>}
                                 {gate.delete && <DropdownMenuItem onClick={() => {setHapus(true), setData({id:value.id,})}}><BadgeX/> Hapus</DropdownMenuItem>}
                                 </DropdownMenuContent>
                             </DropdownMenu>

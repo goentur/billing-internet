@@ -21,14 +21,6 @@ class CetakPembayaranResource extends JsonResource
         $timezone = Memo::forDay('user-timezone-' . Auth::id(), fn() => Auth::user()?->zonaWaktu->nama ?? 'UTC');
         return [
             'user' => $this->when(!blank($this->user), Memo::for10min('user-' . $this->user_id, fn() => $this->user->name)),
-            'perusahaan' => $this->when(!blank($this->perusahaan), function () {
-                return Memo::forDay('cetak-perusahaan-' . $this->perusahaan_id, function () {
-                    return [
-                        'nama' => $this->perusahaan->nama,
-                        'alamat' => $this->perusahaan->alamat,
-                    ];
-                });
-            }),
             'pelanggan' => $this->when(!blank($this->pelanggan), function () {
                 return Memo::forDay('cetak-pelanggan-' . $this->pelanggan_id, function () {
                     return [

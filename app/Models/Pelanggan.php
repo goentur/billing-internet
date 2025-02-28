@@ -10,6 +10,10 @@ class Pelanggan extends Model
     use HasUuids;
     protected $fillable = ['perusahaan_id', 'odp_id', 'paket_internet_id', 'nama', 'tanggal_bayar', 'telp', 'alamat'];
 
+    function perusahaan()
+    {
+        return $this->belongsTo(Perusahaan::class);
+    }
     function paketInternet()
     {
         return $this->belongsTo(PaketInternet::class);

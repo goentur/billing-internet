@@ -25,6 +25,7 @@ class StorePerusahaan extends FormRequest
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
             'koordinat' => 'required|string|max:255',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:256',
         ];
     }
 }

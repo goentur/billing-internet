@@ -5,8 +5,11 @@ namespace App\Repositories\Transaksi;
 use App\Enums\PembayaranStatus;
 use App\Http\Resources\Pembayaran\CetakPembayaranResource;
 use App\Http\Resources\Pembayaran\PembayaranResource;
+use App\Jobs\SendNotificationWhatsApp;
 use App\Models\Pelanggan;
 use App\Models\Pembayaran;
+use App\Models\Perusahaan;
+use App\Support\Facades\Helpers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,8 +48,8 @@ class PembayaranRepository
             DB::beginTransaction();
 
             // Ambil data pelanggan
-            $pelanggan = Pelanggan::with('paketInternet')
-            ->select('id', 'paket_internet_id', 'tanggal_bayar')
+            $pelanggan = Pelanggan::with('perusahaan', 'paketInternet')
+            ->select('id', 'perusahaan_id', 'paket_internet_id', 'nama', 'telp', 'tanggal_bayar', 'alamat')
             ->findOrFail($request->pelanggan);
 
             // Konversi bulan_pembayaran ke timestamp awal dan akhir bulan
@@ -79,6 +82,25 @@ class PembayaranRepository
             ]);
 
             DB::commit();
+            SendNotificationWhatsApp::dispatch($pelanggan->telp, '
+📢 Konfirmasi Pembayaran Internet Berhasil
+
+Halo ' . $pelanggan->nama . ' 👋,
+
+Terima kasih! Kami telah menerima pembayaran internet Anda dengan rincian sebagai berikut:
+
+Nama        : ' . $pelanggan->nama . '
+Alamat      : ' . $pelanggan->alamat . '
+Periode     : ' . $request->bulan_pembayaran . '
+Nominal     : ' . Helpers::ribuan($pelanggan->paketInternet->harga) . '
+
+Terima kasih telah menggunakan layanan kami! 😊
+Terima kasih sudah mempercayakan layanan internet Anda kepada kami. Selamat menikmati koneksi yang cepat dan stabil! 😊
+
+Salam,
+' . $pelanggan->perusahaan->nama . '
+')->delay(now()->addSeconds(10));
+
         } catch (ValidationException $e) {
             DB::rollBack();
             throw $e; // Lempar kembali error validasi
@@ -91,7 +113,7 @@ class PembayaranRepository
     }
     public function cetakData($request)
     {
-        return new CetakPembayaranResource($this->model::select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total')
+        return new CetakPembayaranResource($this->model::select('id', 'user_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total')
         ->findOrFail($request->id));
     }
 }

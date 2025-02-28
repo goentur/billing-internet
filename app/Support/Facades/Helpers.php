@@ -25,6 +25,18 @@ class Helpers
     {
         return number_format($num, $decimals, $decimal_separator, $thousands_separator);
     }
+    public static function filename()
+    {
+        $s = strtoupper(md5(uniqid(rand(), true)));
+        $kode =
+            substr($s, 0, 8) . '-' .
+            substr($s, 8, 4) . '-' .
+            substr($s, 12, 4) . '-' .
+            substr($s, 16, 4) . '-' .
+            substr($s, 20) . '-' .
+            time();
+        return $kode;
+    }
 
     public function __call($method, array $parameters)
     {

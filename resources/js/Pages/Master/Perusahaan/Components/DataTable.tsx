@@ -53,7 +53,7 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                         <DropdownMenu>
                             <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, nama:value.nama, alamat:value.alamat, koordinat:value.koordinat})}}><Pencil/> Ubah</DropdownMenuItem>}
+                                {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, nama:value.nama, alamat:value.alamat, koordinat:value.koordinat, logo:null})}}><Pencil/> Ubah</DropdownMenuItem>}
                                 {gate.delete && <DropdownMenuItem onClick={() => {setHapus(true), setData({id:value.id})}}><BadgeX/> Hapus</DropdownMenuItem>}
                             </DropdownMenuContent>
                         </DropdownMenu>

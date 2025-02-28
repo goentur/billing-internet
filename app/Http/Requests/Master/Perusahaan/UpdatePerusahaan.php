@@ -25,6 +25,7 @@ class UpdatePerusahaan extends FormRequest
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
             'koordinat' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:256',
         ];
     }
 }

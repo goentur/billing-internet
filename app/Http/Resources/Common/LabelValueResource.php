@@ -15,8 +15,8 @@ class LabelValueResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'value' => $this->id ?? $this->uuid, // Sesuaikan dengan kolom ID
-            'label' => $this->nama . (blank($this->alamat) ? '' : ' - ' . $this->alamat) ?? $this->name, // Sesuaikan dengan kolom label
+            'value' => $this->uuid ?? $this->id,
+            'label' => blank($this->nama) ? $this->name : $this->nama . (blank($this->alamat) ? '' : ' - ' . $this->alamat),
         ];
     }
 }

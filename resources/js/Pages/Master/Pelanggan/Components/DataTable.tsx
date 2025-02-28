@@ -49,17 +49,17 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                 dataTable.length > 0 ? dataTable.map((value : any,index:number) => (
                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-900">
                     <td className="px-2 py-1 border text-center">{dataInfo++}</td>
-                    <td className="px-2 py-1 border">{value.odp}</td>
+                    <td className="px-2 py-1 border">{value?.odp?.nama}</td>
                     <td className="px-2 py-1 border">{value.nama}</td>
                     <td className="px-2 py-1 border">{value.tanggal_bayar}</td>
                     <td className="px-2 py-1 border">{value.telp}</td>
                     <td className="px-2 py-1 border">{value.alamat}</td>
-                    <td className="px-2 py-1 border">{value.paket_internet}</td>
+                    <td className="px-2 py-1 border">{value?.paket_internet?.nama}</td>
                     <td className="border text-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({id:value.id,odp:value.odp_id, paket_internet:value.paket_internet_id, nama:value.nama, tanggal_bayar:value.tanggal_bayar, telp:value.telp, alamat:value.alamat})}}><Pencil/> Ubah</DropdownMenuItem>}
+                                {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({id:value.id,odp:value?.odp?.id, paket_internet:value?.paket_internet?.id, nama:value.nama, tanggal_bayar:value.tanggal_bayar, telp:value.telp, alamat:value.alamat})}}><Pencil/> Ubah</DropdownMenuItem>}
                                 {gate.delete && <DropdownMenuItem onClick={() => {setHapus(true), setData({id:value.id})}}><BadgeX/> Hapus</DropdownMenuItem>}
                             </DropdownMenuContent>
                         </DropdownMenu>

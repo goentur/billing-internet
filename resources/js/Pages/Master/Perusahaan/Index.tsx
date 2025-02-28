@@ -41,6 +41,7 @@ export default function Index({gate}:indexProps) {
         nama: '',
         alamat: '',
         koordinat: '',
+        logo: '',
     });
 
     useEffect(() => {
@@ -80,6 +81,7 @@ export default function Index({gate}:indexProps) {
 
         action(routeName, {
             preserveScroll: true,
+            forceFormData: true,
             onSuccess: (e) => {
                 setForm(false);
                 reset();

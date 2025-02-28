@@ -34,7 +34,6 @@ class HandleInertiaRequests extends Middleware
         $authData = Memo::forHour('share-data-' . $request->user()?->id, function () use ($request) {
             $user = $request->user();
             $perusahaan = $user?->perusahaan[0] ?? null;
-
             $koordinat = $perusahaan?->koordinat
                 ? array_reverse(explode(", ", $perusahaan->koordinat))
                 : [109.52646521589804, -7.01800386097385];
@@ -46,6 +45,8 @@ class HandleInertiaRequests extends Middleware
                     'id' => $perusahaan?->id ?? time(),
                     'nama' => $perusahaan?->nama ?? 'DEVELOPER ABATA TECH',
                     'koordinat' => $koordinat,
+                    'alamat' => $perusahaan?->alamat ?? '',
+                    'logo' => $perusahaan?->logo ? asset('storage/' . $perusahaan?->logo) : '',
                 ],
             ];
         });

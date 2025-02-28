@@ -6,11 +6,12 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 type DataPrintType = {
 	dataPrint : any,
+	perusahaan : any,
 	setDataPrint : React.Dispatch<React.SetStateAction<any>>,
 };
 
-export default function NotaThermal({ dataPrint , setDataPrint }: DataPrintType) {
-	const contentRef = useRef(null);
+export default function NotaThermal({ perusahaan, dataPrint, setDataPrint }: DataPrintType) {
+	const contentRef = useRef<HTMLDivElement>(null);;
 
     const handlePrintLaporan = useReactToPrint({
         contentRef,
@@ -26,19 +27,20 @@ export default function NotaThermal({ dataPrint , setDataPrint }: DataPrintType)
 
     useEffect(() => {
         if (dataPrint && Object.keys(dataPrint).length > 0) {
-			handlePrintLaporan()
+			setTimeout(() => {
+				handlePrintLaporan()
+			}, 1000);
         }
     }, [dataPrint]);
     return (<>
 			{ dataPrint && Object.keys(dataPrint).length > 0 && (
 				<>
 					<div className="flex flex-col items-center">
-						<div ref={contentRef} className="w-[80mm] p-0 m-0 font-mono">
-							<div className="text-center">
-								<Globe size={30} className="mx-auto mb-1" />
-								<h1 className="font-bold text-lg uppercase">{appName}</h1>
-								<p className="font-semibold">{dataPrint?.perusahaan?.nama ?? '-'}</p>
-								<p className="text-xs">{dataPrint?.perusahaan?.alamat ?? '-'}</p>
+						<div ref={contentRef} className="w-[80mm] p-0 m-0 border border-dashed font-mono">
+							<div className="text-center flex-auto">
+        						<img src={perusahaan.logo} alt="Logo Perusahaan" className="w-1/4 mx-auto" />
+								<p className="font-semibold">{perusahaan.nama}</p>
+								<p className="text-xs">{perusahaan.alamat}</p>
 							</div>
 							<table className="w-full text-xs border-collapse">
 								<tbody>
@@ -102,13 +104,8 @@ export default function NotaThermal({ dataPrint , setDataPrint }: DataPrintType)
 										</td>
 									</tr>
 									<tr>
-										<td colSpan={3}>
-											<br />
-										</td>
-									</tr>
-									<tr>
-										<td colSpan={3}>
-											<br />
+										<td colSpan={3} className='text-[8px]'>
+											dicetak dari {appName}
 										</td>
 									</tr>
 									<tr>

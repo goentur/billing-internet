@@ -19,8 +19,22 @@ class PemilikResource extends JsonResource
             'id' => $this->id,
             'email' => $this->email,
             'name' => $this->name,
-            'zona_waktu' => $this->when(!blank($this->zonaWaktu), Memo::for10min('zona-waktu-' . $this->zona_waktu_id, fn() => $this->zonaWaktu->nama)),
-            'perusahaan' => $this->when(!blank($this->perusahaan), Memo::for10min('perusahaan-' . $this->perusahaan_id, fn() => $this->perusahaan->pluck('nama')->implode(', '))),
+            'zona_waktu' => $this->when(!blank($this->zonaWaktu), function () {
+                return Memo::for10min('zona-waktu-' . $this->zona_waktu_id, function () {
+                    return [
+                        'id' => $this->zona_waktu_id,
+                        'nama' => $this->zonaWaktu->nama,
+                    ];
+                });
+            }),
+            'perusahaan' => $this->when(!blank($this->perusahaan), function () {
+                return Memo::for10min('perusahaan-' . $this->perusahaan_id, function () {
+                    return [
+                        'id' => $this->perusahaan->pluck('id')->implode(', '),
+                        'nama' => $this->perusahaan->pluck('nama')->implode(', '),
+                    ];
+                });
+            }),
         ];
     }
 }

@@ -1,3 +1,4 @@
+import SelectPopover from '@/Components/SelectPopover';
 import { Button } from '@/Components/ui/button';
 import {
     Dialog,
@@ -7,26 +8,11 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/Components/ui/dialog";
+import InfoPassword from '@/Components/ui/info-password';
 import { Input } from '@/Components/ui/input';
 import { Label } from "@/Components/ui/label";
 import clsx from "clsx";
-import { Check, ChevronsUpDown, Loader2, Save } from 'lucide-react';
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-} from "@/Components/ui/command";
-import InfoPassword from '@/Components/ui/info-password';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/Components/ui/popover";
-import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { Loader2, Save } from 'lucide-react';
 type FormDialogProps = {
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -41,7 +27,6 @@ type FormDialogProps = {
     dataZonaWaktu: { value: string; label: string }[];
 };
 export default function FormDialog({open,setOpen,judul,data,setData,errors,formRefs,processing, isEdit,simpanAtauUbah,dataZonaWaktu}:FormDialogProps) {
-    const [openSelectZonaWaktu, setOpenSelectZonaWaktu] = useState(false)
     return (
         <div>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -126,51 +111,7 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                             <InfoPassword/>
                             </>)}
                             <div className="grid gap-2">
-                                <Label htmlFor="zona_waktu" className={clsx({ "text-red-500": errors.zona_waktu }, "capitalize")}>zona waktu</Label>
-                                <Popover open={openSelectZonaWaktu} onOpenChange={setOpenSelectZonaWaktu}>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            role="combobox"
-                                            aria-expanded={openSelectZonaWaktu}
-                                            className="w-full justify-between"
-                                        >
-                                        {data.zona_waktu
-                                            ? dataZonaWaktu.find((d) => d.value === data.zona_waktu)?.label
-                                            : "Pilih zona waktu..."}
-                                        <ChevronsUpDown className="opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="p-0">
-                                        <Command className="w-full">
-                                            <CommandInput placeholder="Cari zona waktu..." className="h-9" />
-                                            <CommandList>
-                                                <CommandEmpty>Zona waktu tidak ada.</CommandEmpty>
-                                                <CommandGroup>
-                                                {dataZonaWaktu.map((d) => (
-                                                    <CommandItem
-                                                        key={d.value}
-                                                        value={d.value}
-                                                        onSelect={(currentValue) => {
-                                                            setData((prevData:any) => ({ ...prevData, zona_waktu: currentValue }))
-                                                            setOpenSelectZonaWaktu(false)
-                                                        }}
-                                                    >
-                                                    {d.label}
-                                                    <Check
-                                                        className={cn(
-                                                            "ml-auto",
-                                                            data.zona_waktu === d.value ? "opacity-100" : "opacity-0"
-                                                        )}
-                                                    />
-                                                    </CommandItem>
-                                                ))}
-                                                </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
-                                {errors.zona_waktu && <div className="text-red-500 text-xs mt-0">{errors.zona_waktu}</div>}
+                                <SelectPopover label="zona waktu" selectedValue={data.zona_waktu} options={dataZonaWaktu} onSelect={(value) => setData((prevData:any) => ({ ...prevData, zona_waktu: value }))} error={errors.zona_waktu}/>
                             </div>
                         </DialogDescription>
                         <DialogFooter>

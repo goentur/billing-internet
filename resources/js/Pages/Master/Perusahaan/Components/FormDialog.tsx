@@ -11,6 +11,7 @@ import { Input } from '@/Components/ui/input';
 import { Label } from "@/Components/ui/label";
 import clsx from "clsx";
 import { Loader2, Save } from 'lucide-react';
+import { useEffect } from 'react';
 type FormDialogProps = {
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -23,6 +24,16 @@ type FormDialogProps = {
     simpanAtauUbah: (e: React.FormEvent) => void;
 };
 export default function FormDialog({open,setOpen,judul,data,setData,errors,formRefs,processing,simpanAtauUbah}:FormDialogProps) {
+    console.log(data)
+    useEffect(() => {
+        setData((prevData: any) => ({
+            ...prevData,
+            nama: data.nama || "",
+            alamat: data.alamat || "",
+            koordinat: data.koordinat || "",
+            logo: data.logo || null
+        }));
+    }, [open]); // Jalankan setiap kali dialog dibuka
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
@@ -84,6 +95,21 @@ export default function FormDialog({open,setOpen,judul,data,setData,errors,formR
                                 required
                             />
                             {errors.koordinat && <div className="text-red-500 text-xs mt-0">{errors.koordinat}</div>}
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="logo">Logo</Label>
+                            <Input id="logo" accept='image/png, image/jpeg, image/jpg, image/webp' 
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    const file = event.target.files?.[0] || null;
+                                    setData((prevData: any) => ({
+                                        ...prevData, // Memastikan data lama tetap ada
+                                        logo: file ?? prevData.logo
+                                    }));
+                                }}  
+                                type="file" 
+                            />
+
+                            {errors.logo && <div className="text-red-500 text-xs mt-0">{errors.logo}</div>}
                         </div>
                     </DialogDescription>
                     <DialogFooter>

@@ -57,7 +57,6 @@ export default function Index({ gate }: indexProps) {
         pelanggan: '',
         bulan_pembayaran: '',
     });
-
     useEffect(() => {
         getData();
     }, [dataInfo.currentPage, dataInfo.search, dataInfo.perPage, dataInfo.tanggal]);
@@ -150,7 +149,7 @@ export default function Index({ gate }: indexProps) {
                 </CardContent>
             </Card>
             <FormDialog open={form} setOpen={setForm} judul={judul} data={data} setData={setData} errors={errors} processing={processing} simpan={handleSubmit} dataPelanggan={dataPelanggan} />
-            <NotaThermal dataPrint={dataPrint} setDataPrint={setDataPrint}/>
+            <NotaThermal perusahaan={perusahaan} dataPrint={dataPrint} setDataPrint={setDataPrint}/>
         </AuthenticatedLayout>
     );
 }

@@ -44,7 +44,7 @@ class RoleRepository
             $role->update([
                 'name' => $request->nama,
             ]);
-            $role->givePermissionTo($request->permissions);
+            $role->syncPermissions($request->permissions);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

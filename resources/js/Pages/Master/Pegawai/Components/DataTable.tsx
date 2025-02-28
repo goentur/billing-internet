@@ -7,18 +7,18 @@ import {
 import { BadgeX, DatabaseBackup, Ellipsis, Loader2, Pencil } from 'lucide-react';
 
 type DataTableProps = {
-  gate:{
-    create : boolean,
-    update : boolean,
-    delete : boolean,
-  };
-  loading: boolean;
-  dataTable: [];
-  dataInfo: number;
-  setForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-  setHapus: React.Dispatch<React.SetStateAction<boolean>>;
+    gate:{
+        create : boolean,
+        update : boolean,
+        delete : boolean,
+    };
+    loading: boolean;
+    dataTable: [];
+    dataInfo: number;
+    setForm: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
+    setData: React.Dispatch<React.SetStateAction<any>>;
+    setHapus: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIsEdit,setData,setHapus} : DataTableProps) {
@@ -49,12 +49,12 @@ export default function DataTable({gate,loading,dataTable,dataInfo,setForm,setIs
                         <td className="px-2 py-1 border text-center">{dataInfo++}</td>
                         <td className="px-2 py-1 border">{value.email}</td>
                         <td className="px-2 py-1 border">{value.name}</td>
-                        <td className="px-2 py-1 border">{value.zona_waktu}</td>
+                        <td className="px-2 py-1 border">{value?.zona_waktu?.nama}</td>
                         <td className="border text-center">
                             <DropdownMenu>
                                 <DropdownMenuTrigger className='px-2 py-1'><Ellipsis/></DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, email:value.email, nama:value.name, zona_waktu:value.zona_waktu_id})}}><Pencil/> Ubah</DropdownMenuItem>}
+                                    {gate.update && <DropdownMenuItem onClick={() => {setForm(true), setIsEdit(true), setData({ id:value.id, email:value.email, nama:value.name, zona_waktu:value?.zona_waktu?.id})}}><Pencil/> Ubah</DropdownMenuItem>}
                                     {gate.delete && <DropdownMenuItem onClick={() => {setHapus(true), setData({id:value.id,})}}><BadgeX/> Hapus</DropdownMenuItem>}
                                 </DropdownMenuContent>
                             </DropdownMenu>
