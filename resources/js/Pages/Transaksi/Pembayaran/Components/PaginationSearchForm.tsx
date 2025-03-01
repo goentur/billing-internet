@@ -1,31 +1,45 @@
-import SelectDateMonth from '@/Components/SelectDateMonth';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
+import SelectDateMonth from '@/Components/SelectDateMonth'
+import { Button } from '@/Components/ui/button'
+import { Input } from '@/Components/ui/input'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/Components/ui/select";
-import { Plus } from 'lucide-react';
+} from '@/Components/ui/select'
+import { Plus } from 'lucide-react'
 
 type PaginationSearchFormProps = {
     gate: {
-        create : boolean,
-    };
-    tanggal: string | null;
-    setDataInfo: React.Dispatch<React.SetStateAction<any>>;
-    setForm: React.Dispatch<React.SetStateAction<boolean>>;
-    reset: () => void;
-};
+        create: boolean
+    }
+    tanggal: string | null
+    setDataInfo: React.Dispatch<React.SetStateAction<any>>
+    setForm: React.Dispatch<React.SetStateAction<boolean>>
+    reset: () => void
+}
 
-export default function PaginationSearchForm({gate,tanggal,setDataInfo,setForm,reset} : PaginationSearchFormProps) {
+export default function PaginationSearchForm({
+    gate,
+    tanggal,
+    setDataInfo,
+    setForm,
+    reset,
+}: PaginationSearchFormProps) {
     return (
         <div className="mb-4">
             <div className="grid gap-4 lg:grid-cols-2">
                 <div>
-                    <Select onValueChange={(e) =>  setDataInfo((prev:any) => ({ ...prev, perPage: Number(e), currentPage: 1 }))}>
+                    <Select
+                        onValueChange={(e) =>
+                            setDataInfo((prev: any) => ({
+                                ...prev,
+                                perPage: Number(e),
+                                currentPage: 1,
+                            }))
+                        }
+                    >
                         <SelectTrigger className="w-1/3 hidden md:flex">
                             <SelectValue placeholder="Jumlah per halaman" />
                         </SelectTrigger>
@@ -38,7 +52,17 @@ export default function PaginationSearchForm({gate,tanggal,setDataInfo,setForm,r
                     </Select>
                 </div>
                 <form className="flex items-center gap-4">
-                    <SelectDateMonth hide={true} value={tanggal} onChange={(e:any) =>  setDataInfo((prev:any) => ({ ...prev, tanggal: e, currentPage: 1 }))}/>
+                    <SelectDateMonth
+                        hide={true}
+                        value={tanggal}
+                        onChange={(e: any) =>
+                            setDataInfo((prev: any) => ({
+                                ...prev,
+                                tanggal: e,
+                                currentPage: 1,
+                            }))
+                        }
+                    />
                     <Input
                         id="cari"
                         name="cari"
@@ -46,11 +70,27 @@ export default function PaginationSearchForm({gate,tanggal,setDataInfo,setForm,r
                         placeholder="Masukan kata percarian"
                         autoComplete="off"
                         required
-                        onChange={(e) => setDataInfo((prev:any) => ({...prev, search:e.target.value, currentPage : 1}))}
+                        onChange={(e) =>
+                            setDataInfo((prev: any) => ({
+                                ...prev,
+                                search: e.target.value,
+                                currentPage: 1,
+                            }))
+                        }
                     />
-                    {gate.create && <Button type="button" variant="destructive" onClick={() => {reset(), setForm(true)}}><Plus/> Tambah</Button>}
+                    {gate.create && (
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                                reset(), setForm(true)
+                            }}
+                        >
+                            <Plus /> Tambah
+                        </Button>
+                    )}
                 </form>
             </div>
         </div>
-    );
+    )
 }

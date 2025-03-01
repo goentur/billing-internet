@@ -47,60 +47,46 @@ class PembayaranRepository
         try {
             DB::beginTransaction();
 
-            // Ambil data pelanggan
+            // Ambil data pelanggan dengan relasi
             $pelanggan = Pelanggan::with('perusahaan', 'paketInternet')
-            ->select('id', 'perusahaan_id', 'paket_internet_id', 'nama', 'telp', 'tanggal_bayar', 'alamat')
-            ->findOrFail($request->pelanggan);
+                ->select('id', 'perusahaan_id', 'paket_internet_id', 'nama', 'telp', 'tanggal_bayar', 'alamat')
+                ->findOrFail($request->pelanggan);
 
             // Konversi bulan_pembayaran ke timestamp awal dan akhir bulan
-            $startOfMonth = Carbon::parse($request->bulan_pembayaran)->startOfMonth()->timestamp;
-            $endOfMonth = Carbon::parse($request->bulan_pembayaran)->endOfMonth()->timestamp;
+            $periode = Carbon::createFromFormat('Y-m', $request->bulan_pembayaran);
+            $startOfMonth = $periode->startOfMonth()->timestamp;
+            $endOfMonth = $periode->endOfMonth()->timestamp;
 
-            // Cek apakah pembayaran sudah ada untuk pelanggan ini di bulan tersebut
-            $existingPayment = $this->model
-                ->where('pelanggan_id', $pelanggan->id)
+            // Cek apakah pembayaran sudah ada
+            if ($this->model->where('pelanggan_id', $pelanggan->id)
                 ->whereBetween('tanggal_pembayaran', [$startOfMonth, $endOfMonth])
-                ->exists();
-
-            if ($existingPayment) {
+                ->exists()
+            ) {
                 throw ValidationException::withMessages([
                     'pelanggan' => 'Pelanggan sudah membayar pada bulan yang dipilih.',
                 ]);
             }
+
             // Set tanggal pembayaran dalam UTC
-            $tanggalPembayaran = Carbon::parse($request->bulan_pembayaran . '-' . $pelanggan->tanggal_bayar . ' ' . date('H:i:s'))->timestamp;
-            // Buat data pembayaran baru
+            $tanggalPembayaran = Carbon::createFromFormat(
+                'Y-m-d H:i:s',
+                "{$request->bulan_pembayaran}-{$pelanggan->tanggal_bayar} " . now()->format('H:i:s')
+            )->timestamp;
+
+            // Simpan data pembayaran
             $this->model->create([
                 'user_id' => Auth::id(),
                 'perusahaan_id' => $request->perusahaan,
                 'pelanggan_id' => $request->pelanggan,
                 'paket_internet_id' => $pelanggan->paket_internet_id,
                 'tanggal_pembayaran' => $tanggalPembayaran,
-                'tanggal_transaksi' => time(),
-                'total' => $pelanggan->paketInternet->harga,
+                'tanggal_transaksi' => now()->timestamp,
+                'total' => optional($pelanggan->paketInternet)->harga ?? 0,
                 'status' => PembayaranStatus::SELESAI,
             ]);
 
             DB::commit();
-            SendNotificationWhatsApp::dispatch($pelanggan->telp, '
-📢 Konfirmasi Pembayaran Internet Berhasil
-
-Halo ' . $pelanggan->nama . ' 👋,
-
-Terima kasih! Kami telah menerima pembayaran internet Anda dengan rincian sebagai berikut:
-
-Nama        : ' . $pelanggan->nama . '
-Alamat      : ' . $pelanggan->alamat . '
-Periode     : ' . $request->bulan_pembayaran . '
-Nominal     : ' . Helpers::ribuan($pelanggan->paketInternet->harga) . '
-
-Terima kasih telah menggunakan layanan kami! 😊
-Terima kasih sudah mempercayakan layanan internet Anda kepada kami. Selamat menikmati koneksi yang cepat dan stabil! 😊
-
-Salam,
-' . $pelanggan->perusahaan->nama . '
-')->delay(now()->addSeconds(10));
-
+            $this->notifikasi($pelanggan, $request->bulan_pembayaran);
         } catch (ValidationException $e) {
             DB::rollBack();
             throw $e; // Lempar kembali error validasi
@@ -115,5 +101,30 @@ Salam,
     {
         return new CetakPembayaranResource($this->model::select('id', 'user_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total')
         ->findOrFail($request->id));
+    }
+    public function notifikasi($pelanggan, $bulanPembayaran)
+    {
+        $message = "
+📢 *Konfirmasi Pembayaran Internet Berhasil*
+
+Halo *{$pelanggan->nama}* 👋,
+
+Terima kasih! Kami telah menerima pembayaran internet Anda dengan rincian sebagai berikut:
+
+```
+Nama        : " . $pelanggan->nama . "
+Alamat      : " . $pelanggan->alamat . "
+Paket       : " . optional($pelanggan->paketInternet)->nama . "
+Nominal     : " . Helpers::ribuan(optional($pelanggan->paketInternet)->harga) . "
+Keterangan  : Bayar internet untuk bulan " . Carbon::createFromFormat('Y-m', $bulanPembayaran)->translatedFormat('M Y') . "
+```
+
+Terima kasih telah menggunakan layanan kami! 😊  
+Salam,  
+*{$pelanggan->perusahaan->nama}*
+
+_pembayaran sudah termasuk pajak 11%_
+";
+        SendNotificationWhatsApp::dispatch($pelanggan->telp, $message)->delay(now()->addSeconds(10));
     }
 }

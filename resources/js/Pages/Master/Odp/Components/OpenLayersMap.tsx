@@ -1,39 +1,46 @@
-import Feature from 'ol/Feature';
-import Map from 'ol/Map';
-import Overlay from 'ol/Overlay';
-import View from 'ol/View';
-import Point from 'ol/geom/Point';
-import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import 'ol/ol.css';
-import { fromLonLat, toLonLat } from 'ol/proj';
-import { XYZ } from 'ol/source';
-import VectorSource from 'ol/source/Vector';
-import { Style } from 'ol/style';
-import Icon from 'ol/style/Icon';
-import React, { useEffect, useRef } from 'react';
-import poinIcon from '../../../../../images/maps/poin.png';
+import Feature from 'ol/Feature'
+import Map from 'ol/Map'
+import Overlay from 'ol/Overlay'
+import View from 'ol/View'
+import Point from 'ol/geom/Point'
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer'
+import 'ol/ol.css'
+import { fromLonLat, toLonLat } from 'ol/proj'
+import { XYZ } from 'ol/source'
+import VectorSource from 'ol/source/Vector'
+import { Style } from 'ol/style'
+import Icon from 'ol/style/Icon'
+import React, { useEffect, useRef } from 'react'
+import poinIcon from '../../../../../images/maps/poin.png'
 
 type PaginationSearchFormProps = {
     gate: {
-        create: boolean;
-        update: boolean;
-        delete: boolean;
-    };
-    dataMaps: [];
-    perusahaan: any;
-    setForm: React.Dispatch<React.SetStateAction<boolean>>;
-    setData: (data: any) => void;
-    setDataInfo: React.Dispatch<React.SetStateAction<any>>;
-};
+        create: boolean
+        update: boolean
+        delete: boolean
+    }
+    dataMaps: []
+    perusahaan: any
+    setForm: React.Dispatch<React.SetStateAction<boolean>>
+    setData: (data: any) => void
+    setDataInfo: React.Dispatch<React.SetStateAction<any>>
+}
 
-export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, setData, setDataInfo }: PaginationSearchFormProps) {
-    const mapRef = useRef<HTMLDivElement>(null);
-    const mapInstance = useRef<Map | null>(null);
-    const vectorLayerRef = useRef<VectorLayer | null>(null);
-    const overlaysRef = useRef<Overlay[]>([]);
+export default function OpenLayersMap({
+    gate,
+    dataMaps,
+    perusahaan,
+    setForm,
+    setData,
+    setDataInfo,
+}: PaginationSearchFormProps) {
+    const mapRef = useRef<HTMLDivElement>(null)
+    const mapInstance = useRef<Map | null>(null)
+    const vectorLayerRef = useRef<VectorLayer | null>(null)
+    const overlaysRef = useRef<Overlay[]>([])
 
     useEffect(() => {
-        if (!mapRef.current) return;
+        if (!mapRef.current) return
 
         if (!mapInstance.current) {
             // Inisialisasi peta pertama kali
@@ -41,9 +48,9 @@ export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, set
                 source: new XYZ({
                     url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                 }),
-            });
+            })
 
-            const vectorSource = new VectorSource();
+            const vectorSource = new VectorSource()
             const vectorLayer = new VectorLayer({
                 source: vectorSource,
                 style: new Style({
@@ -53,7 +60,7 @@ export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, set
                         scale: 0.1,
                     }),
                 }),
-            });
+            })
 
             const map = new Map({
                 target: mapRef.current,
@@ -62,14 +69,17 @@ export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, set
                     center: fromLonLat(perusahaan.koordinat),
                     zoom: 17,
                 }),
-            });
+            })
 
-            mapInstance.current = map;
-            vectorLayerRef.current = vectorLayer;
+            mapInstance.current = map
+            vectorLayerRef.current = vectorLayer
 
             // **Menangani Klik pada Fitur**
             map.on('click', (event) => {
-                const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+                const feature = map.forEachFeatureAtPixel(
+                    event.pixel,
+                    (feat) => feat
+                )
                 if (feature) {
                     setDataInfo((prev: any) => ({
                         ...prev,
@@ -77,78 +87,80 @@ export default function OpenLayersMap({ gate, dataMaps, perusahaan, setForm, set
                         nama: feature.get('nama'),
                         alamat: feature.get('alamat'),
                         currentPage: 1,
-                    }));
+                    }))
                 }
-            });
+            })
 
             // **Menangani Perubahan Kursor (Cursor Pointer)**
             map.on('pointermove', (event) => {
-                const targetElement = map.getTargetElement();
-                const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+                const targetElement = map.getTargetElement()
+                const feature = map.forEachFeatureAtPixel(
+                    event.pixel,
+                    (feat) => feat
+                )
                 if (feature) {
-                    targetElement.style.cursor = 'pointer';
+                    targetElement.style.cursor = 'pointer'
                 } else {
-                    targetElement.style.cursor = 'default';
+                    targetElement.style.cursor = 'default'
                 }
-            });
+            })
 
             if (gate.create) {
                 map.getViewport().addEventListener('contextmenu', (event) => {
-                    event.preventDefault();
+                    event.preventDefault()
                     setData({
                         koordinat: toLonLat(map.getEventCoordinate(event)),
                         perusahaan: perusahaan.id,
-                    });
-                    setForm(true);
-                });
+                    })
+                    setForm(true)
+                })
             }
         }
 
-        const map = mapInstance.current;
-        if (!map) return;
+        const map = mapInstance.current
+        if (!map) return
 
         // Hapus semua overlay lama sebelum menambahkan yang baru
-        overlaysRef.current.forEach((overlay) => map.removeOverlay(overlay));
-        overlaysRef.current = [];
+        overlaysRef.current.forEach((overlay) => map.removeOverlay(overlay))
+        overlaysRef.current = []
 
-        const vectorLayer = vectorLayerRef.current;
-        if (!vectorLayer) return;
+        const vectorLayer = vectorLayerRef.current
+        if (!vectorLayer) return
 
         // Hapus semua fitur dari vector layer
-        const vectorSource = vectorLayer.getSource();
+        const vectorSource = vectorLayer.getSource()
         if (vectorSource) {
-            vectorSource.clear();
+            vectorSource.clear()
         }
 
         // Tambahkan titik lokasi dan overlay baru
         dataMaps.forEach(({ id, nama, alamat, koordinat }) => {
-            const parsedKoordinat = JSON.parse(koordinat);
+            const parsedKoordinat = JSON.parse(koordinat)
             if (Array.isArray(parsedKoordinat)) {
                 const feature = new Feature({
                     geometry: new Point(fromLonLat(parsedKoordinat)),
-                });
-                feature.setId(id);
-                feature.set('nama', nama);
-                feature.set('alamat', alamat);
-                vectorSource?.addFeature(feature);
+                })
+                feature.setId(id)
+                feature.set('nama', nama)
+                feature.set('alamat', alamat)
+                vectorSource?.addFeature(feature)
 
                 // **Tambahkan Label (Overlay)**
-                const labelElement = document.createElement('div');
-                labelElement.className = 'pin-label';
-                labelElement.innerHTML = nama;
+                const labelElement = document.createElement('div')
+                labelElement.className = 'pin-label'
+                labelElement.innerHTML = nama
 
                 const overlay = new Overlay({
                     position: fromLonLat(parsedKoordinat),
                     element: labelElement,
                     offset: [+10, -24],
-                });
+                })
 
-                map.addOverlay(overlay);
-                overlaysRef.current.push(overlay); // Simpan overlay untuk dihapus nanti
+                map.addOverlay(overlay)
+                overlaysRef.current.push(overlay) // Simpan overlay untuk dihapus nanti
             }
-        });
+        })
+    }, [dataMaps])
 
-    }, [dataMaps]);
-
-    return <div ref={mapRef} style={{ width: '100%', height: '65vh' }} />;
+    return <div ref={mapRef} style={{ width: '100%', height: '65vh' }} />
 }

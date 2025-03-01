@@ -7,6 +7,7 @@ use App\Http\Controllers\Master\PelangganController;
 use App\Http\Controllers\Master\PemilikController;
 use App\Http\Controllers\Master\PerusahaanController;
 use App\Http\Controllers\Master\ZonaWaktuController;
+use App\Http\Controllers\Pengaturan\AplikasiController;
 use App\Http\Controllers\Pengaturan\PenggunaController;
 use App\Http\Controllers\Pengaturan\PermissionController;
 use App\Http\Controllers\Pengaturan\RoleController;
@@ -73,6 +74,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('permission')->name('permission.')->group(function () {
             Route::middleware('can:permission-index')->post('data', [PermissionController::class, 'data'])->name('data');
             Route::post('all-data', [PermissionController::class, 'allData'])->name('all-data');
+        });
+        Route::middleware('can:aplikasi-index')->prefix('aplikasi')->name('aplikasi.')->controller(AplikasiController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('optimize-clear', 'optimizeClear')->name('optimize-clear');
         });
         Route::resource('pengguna', PenggunaController::class)->middleware('can:pengguna-index');
         Route::resource('role', RoleController::class)->middleware('can:role-index');

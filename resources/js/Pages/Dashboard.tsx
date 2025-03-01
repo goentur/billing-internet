@@ -1,9 +1,15 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/Components/ui/card'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import { Head } from '@inertiajs/react'
 
 export default function Dashboard() {
-    const judul = "Dashboard"
+    const judul = 'Dashboard'
     return (
         <AuthenticatedLayout header={judul}>
             <Head title={judul} />
@@ -11,10 +17,8 @@ export default function Dashboard() {
                 <CardHeader>
                     <CardTitle className="text-xl">Dashboard</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    You're logged in!
-                </CardContent>
+                <CardContent>You're logged in!</CardContent>
             </Card>
         </AuthenticatedLayout>
-    );
+    )
 }

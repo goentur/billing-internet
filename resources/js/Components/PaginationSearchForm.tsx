@@ -1,32 +1,46 @@
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button'
+import { Input } from '@/Components/ui/input'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/Components/ui/select";
-import { Plus } from 'lucide-react';
+} from '@/Components/ui/select'
+import { Plus } from 'lucide-react'
 
 type PaginationSearchFormProps = {
     gate: {
-        create : boolean,
-        update : boolean,
-        delete : boolean,
-    };  
-    setDataInfo: React.Dispatch<React.SetStateAction<any>>;
-    setForm: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
-    reset: () => void;
-};
+        create: boolean
+        update: boolean
+        delete: boolean
+    }
+    setDataInfo: React.Dispatch<React.SetStateAction<any>>
+    setForm: React.Dispatch<React.SetStateAction<boolean>>
+    setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
+    reset: () => void
+}
 
-export default function PaginationSearchForm({gate,setDataInfo,setForm,setIsEdit,reset} : PaginationSearchFormProps) {
+export default function PaginationSearchForm({
+    gate,
+    setDataInfo,
+    setForm,
+    setIsEdit,
+    reset,
+}: PaginationSearchFormProps) {
     return (
         <div className="mb-4">
             <div className="grid gap-4 lg:grid-cols-2">
                 <div>
-                    <Select onValueChange={(e) =>  setDataInfo((prev:any) => ({ ...prev, perPage: Number(e), currentPage: 1 }))}>
+                    <Select
+                        onValueChange={(e) =>
+                            setDataInfo((prev: any) => ({
+                                ...prev,
+                                perPage: Number(e),
+                                currentPage: 1,
+                            }))
+                        }
+                    >
                         <SelectTrigger className="w-1/3">
                             <SelectValue placeholder="Jumlah per halaman" />
                         </SelectTrigger>
@@ -46,11 +60,27 @@ export default function PaginationSearchForm({gate,setDataInfo,setForm,setIsEdit
                         placeholder="Masukan kata percarian"
                         autoComplete="off"
                         required
-                        onChange={(e) => setDataInfo((prev:any) => ({...prev, search:e.target.value, currentPage : 1}))}
+                        onChange={(e) =>
+                            setDataInfo((prev: any) => ({
+                                ...prev,
+                                search: e.target.value,
+                                currentPage: 1,
+                            }))
+                        }
                     />
-                    {gate.create && <Button type="button" variant="destructive" onClick={() => {reset(), setForm(true), setIsEdit(false)}}><Plus/> Tambah</Button>}
+                    {gate.create && (
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                                reset(), setForm(true), setIsEdit(false)
+                            }}
+                        >
+                            <Plus /> Tambah
+                        </Button>
+                    )}
                 </form>
             </div>
         </div>
-    );
+    )
 }

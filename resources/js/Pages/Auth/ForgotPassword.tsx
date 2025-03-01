@@ -1,32 +1,30 @@
-import { Button } from "@/Components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardHeader
-} from "@/Components/ui/card";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { Loader2, Send } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { Button } from '@/Components/ui/button'
+import { Card, CardContent, CardHeader } from '@/Components/ui/card'
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
+import GuestLayout from '@/Layouts/GuestLayout'
+import { Head, Link, useForm } from '@inertiajs/react'
+import { Loader2, Send } from 'lucide-react'
+import { FormEventHandler } from 'react'
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors } = useForm({
         email: '',
-    });
+    })
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-        post(route('password.email'));
-    };
+        e.preventDefault()
+        post(route('password.email'))
+    }
 
     return (
         <GuestLayout>
             <Head title="Lupa Password" />
             <Card>
                 <CardHeader className="text-justify text-sm">
-                    Lupa password Anda? Tidak masalah. Cukup beri tahu kami alamat email Anda dan kami akan mengirimkan Anda email berisi tautan pengaturan ulang password.
+                    Lupa password Anda? Tidak masalah. Cukup beri tahu kami
+                    alamat email Anda dan kami akan mengirimkan Anda email
+                    berisi tautan pengaturan ulang password.
                 </CardHeader>
                 <CardContent>
                     {status && (
@@ -38,30 +36,60 @@ export default function ForgotPassword({ status }: { status?: string }) {
                         <div className="grid gap-6">
                             <div className="grid gap-6">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email" className={errors.email && "text-red-500"}>Email</Label>
+                                    <Label
+                                        htmlFor="email"
+                                        className={
+                                            errors.email && 'text-red-500'
+                                        }
+                                    >
+                                        Email
+                                    </Label>
                                     <Input
                                         id="email"
                                         name="email"
                                         type="email"
-                                        className={errors.email && "border-red-500"}
+                                        className={
+                                            errors.email && 'border-red-500'
+                                        }
                                         placeholder="Masukan email"
                                         autoFocus={true}
-                                        onChange={(e) => setData('email', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('email', e.target.value)
+                                        }
                                         required
                                     />
-                                    {errors.email && <div className="text-red-500 text-xs mt-0">{errors.email}</div>}
+                                    {errors.email && (
+                                        <div className="text-red-500 text-xs mt-0">
+                                            {errors.email}
+                                        </div>
+                                    )}
                                 </div>
-                                <Button type="submit" disabled={processing} className="w-full">
-                                    {processing ? <Loader2 className="animate-spin" /> : <Send/>} Kirim email
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-full"
+                                >
+                                    {processing ? (
+                                        <Loader2 className="animate-spin" />
+                                    ) : (
+                                        <Send />
+                                    )}{' '}
+                                    Kirim email
                                 </Button>
                             </div>
                             <div className="text-center text-sm">
-                                Tidak punya akun?<Link href={route('register')} className="underline ms-1 underline-offset-4">Daftar</Link>
+                                Tidak punya akun?
+                                <Link
+                                    href={route('register')}
+                                    className="underline ms-1 underline-offset-4"
+                                >
+                                    Daftar
+                                </Link>
                             </div>
                         </div>
                     </form>
                 </CardContent>
             </Card>
         </GuestLayout>
-    );
+    )
 }
