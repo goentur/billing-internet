@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Laporan\PembayaranController as LaporanPembayaranController;
+use App\Http\Controllers\Laporan\PiutangController;
 use App\Http\Controllers\Master\OdpController;
 use App\Http\Controllers\Master\PaketInternetController;
 use App\Http\Controllers\Master\PegawaiController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Master\ZonaWaktuController;
 use App\Http\Controllers\Pengaturan\AplikasiController;
 use App\Http\Controllers\Pengaturan\PenggunaController;
 use App\Http\Controllers\Pengaturan\PermissionController;
+use App\Http\Controllers\Pengaturan\PerusahaanController as PengaturanPerusahaanController;
 use App\Http\Controllers\Pengaturan\RoleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Transaksi\PembayaranController;
@@ -79,6 +82,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('optimize-clear', 'optimizeClear')->name('optimize-clear');
         });
+        Route::middleware('can:pengaturan-perusahaan')->prefix('perusahaan')->name('perusahaan.')->group(function () {
+            Route::get('/', [PengaturanPerusahaanController::class, 'index'])->name('index');
+            Route::post('update/{id}', [PengaturanPerusahaanController::class, 'update'])->name('update');
+        });
         Route::resource('pengguna', PenggunaController::class)->middleware('can:pengguna-index');
         Route::resource('role', RoleController::class)->middleware('can:role-index');
         Route::resource('permission', PermissionController::class)->middleware('can:permission-index');
@@ -91,6 +98,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::post('cetak-data', [PembayaranController::class, 'cetakData'])->name('cetak-data');
             });
             Route::middleware('can:pembayaran-create')->post('store', [PembayaranController::class, 'store'])->name('store');
+        });
+    });
+    Route::prefix('laporan')->name('laporan.')->group(function () {
+        Route::prefix('pembayaran')->name('pembayaran.')->group(function () {
+            Route::middleware('can:laporan-pembayaran-index')->group(function () {
+                Route::get('/', [LaporanPembayaranController::class, 'index'])->name('index');
+                Route::post('data', [LaporanPembayaranController::class, 'data'])->name('data');
+            });
+            Route::middleware('can:laporan-pembayaran-print')->get('print', [LaporanPembayaranController::class, 'print'])->name('print');
+        });
+        Route::prefix('piutang')->name('piutang.')->group(function () {
+            Route::middleware('can:laporan-piutang-index')->group(function () {
+                Route::get('/', [PiutangController::class, 'index'])->name('index');
+                Route::post('data', [PiutangController::class, 'data'])->name('data');
+            });
+            Route::middleware('can:laporan-piutang-print')->get('print', [PiutangController::class, 'print'])->name('print');
         });
     });
 });

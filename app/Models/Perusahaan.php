@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Perusahaan extends Model
 {
     use HasUuids, SoftDeletes;
-    protected $fillable = ['nama', 'alamat', 'koordinat', 'logo'];
+    protected $fillable = ['nama', 'telp', 'alamat', 'koordinat', 'logo', 'token_wa'];
 }

@@ -14,14 +14,16 @@ class SendNotificationWhatsApp implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $token;
     protected $target;
     protected $message;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($target, $message)
+    public function __construct($token, $target, $message)
     {
+        $this->token = $token;
         $this->target = $target;
         $this->message = $message;
     }
@@ -32,7 +34,7 @@ class SendNotificationWhatsApp implements ShouldQueue
     public function handle(): void
     {
         $response = Http::withHeaders([
-            'Authorization' => '8nF33GVXjk1g2vofowSC',
+            'Authorization' => $this->token,
         ])->post('https://api.fonnte.com/send', [
             'target' => $this->target,
             'message' => $this->message,

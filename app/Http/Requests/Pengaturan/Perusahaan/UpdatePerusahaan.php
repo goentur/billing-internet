@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Master\Perusahaan;
+namespace App\Http\Requests\Pengaturan\Perusahaan;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,9 +25,7 @@ class UpdatePerusahaan extends FormRequest
             'nama' => 'required|string|max:255',
             'telp' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
-            'koordinat' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:256',
-            'token_wa' => 'required|string|max:255',
         ];
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Master\Perusahaan;
+namespace App\Http\Requests\Laporan;
 
+use App\Models\Perusahaan;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdatePerusahaan extends FormRequest
+class DataPembayaran extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +24,11 @@ class UpdatePerusahaan extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => 'required|string|max:255',
-            'telp' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'koordinat' => 'required|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:256',
-            'token_wa' => 'required|string|max:255',
+            'page' => 'required|numeric',
+            'perPage' => 'required|numeric|max:100|min:25',
+            'perusahaan' => 'required|string|uuid|' . Rule::exists(Perusahaan::class, 'id'),
+            'search' => 'nullable|string|max:255',
+            'tanggal' => 'nullable|string|max:255',
         ];
     }
 }

@@ -23,9 +23,11 @@ class StorePerusahaan extends FormRequest
     {
         return [
             'nama' => 'required|string|max:255',
+            'telp' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
             'koordinat' => 'required|string|max:255',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:256',
+            'token_wa' => 'required|string|max:255',
         ];
     }
 }

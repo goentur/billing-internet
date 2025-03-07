@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
                 'perusahaan' => [
                     'id' => $perusahaan?->id ?? time(),
                     'nama' => $perusahaan?->nama ?? 'DEVELOPER ABATA TECH',
+                    'telp' => $perusahaan?->telp ?? '+62 877-9905-8312',
                     'koordinat' => $koordinat,
                     'alamat' => $perusahaan?->alamat ?? '',
                     'logo' => $perusahaan?->logo ? asset('storage/' . $perusahaan?->logo) : '',

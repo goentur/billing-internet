@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Perusahaan;
+namespace App\Http\Resources\Laporan;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PerusahaanResource extends JsonResource
+class PiutangResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,10 @@ class PerusahaanResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
             'nama' => $this->nama,
-            'telp' => $this->telp,
             'alamat' => $this->alamat,
-            'koordinat' => $this->koordinat,
-            'token_wa' => $this->token_wa,
+            'paket' => $this->paketInternet?->nama,
+            'tgl' => $this->tanggal_bayar,
         ];
     }
 }

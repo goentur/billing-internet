@@ -22,4 +22,8 @@ class Pelanggan extends Model
     {
         return $this->belongsTo(Odp::class);
     }
+    function pembayaran()
+    {
+        return $this->hasMany(Pembayaran::class);
+    }
 }

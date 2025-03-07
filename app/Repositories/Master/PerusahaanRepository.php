@@ -35,9 +35,11 @@ class PerusahaanRepository
             $path = $request->file('logo')->storeAs('logo', $fileName, 'public');
             $this->model->create([
                 'nama' => $request->nama,
+                'telp' => $request->telp,
                 'alamat' => $request->alamat,
                 'koordinat' => $request->koordinat,
                 'logo' => $path,
+                'token_wa' => $request->token_wa,
             ]);
             DB::commit();
         } catch (\Exception $e) {
@@ -49,31 +51,23 @@ class PerusahaanRepository
     {
         try {
             DB::beginTransaction();
-
-            // Ambil data lama berdasarkan ID
             $item = $this->model->findOrFail($id);
-
-            // Cek apakah ada file logo yang baru diunggah
             if ($request->hasFile('logo')) {
-                // Jika ada logo lama, hapus dulu
                 if ($item->logo) {
                     Storage::disk('public')->delete($item->logo);
                 }
-
-                // Simpan logo baru dengan nama yang dihasilkan oleh Helpers::filename()
                 $fileName = Helpers::filename() . '.' . $request->file('logo')->getClientOriginalExtension();
                 $path = $request->file('logo')->storeAs('logo', $fileName, 'public');
             } else {
-                // Jika tidak ada logo baru, tetap gunakan logo lama
                 $path = $item->logo;
             }
-
-            // Update data
             $item->update([
                 'nama' => $request->nama,
+                'telp' => $request->telp,
                 'alamat' => $request->alamat,
-                'koordinat' => $request->koordinat,
+                'koordinat' => $request->koordinat ?? $item->koordinat,
                 'logo' => $path,
+                'token_wa' => $request->token_wa ?? $item->token_wa,
             ]);
 
             DB::commit();

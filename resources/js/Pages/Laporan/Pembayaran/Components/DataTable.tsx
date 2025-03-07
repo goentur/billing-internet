@@ -5,29 +5,15 @@ import { useState } from 'react'
 type DataTableProps = {
     loading: boolean
     dataTable: []
-    setData: React.Dispatch<React.SetStateAction<any>>
-    setPrint: (id: string) => void
 }
 export default function DataTable({
     loading,
     dataTable,
-    setPrint,
 }: DataTableProps) {
-    const [loadingPrintId, setLoadingPrintId] = useState<string | null>(null)
-
-    const handlePrint = async (id: string) => {
-        setLoadingPrintId(id)
-        await setPrint(id)
-        setLoadingPrintId(null)
-    }
-
     return (
         <table className="w-full text-left border-collapse border">
             <thead className="text-center">
                 <tr className="uppercase text-sm leading-normal">
-                    <th rowSpan={2} className="px-2 border w-[1px] table-cell">
-                        AKSI
-                    </th>
                     <th
                         rowSpan={2}
                         className="px-2 border hidden md:table-cell"
@@ -89,18 +75,6 @@ export default function DataTable({
                             key={index}
                             className="hover:bg-gray-100 text-sm align-top dark:hover:bg-slate-900"
                         >
-                            <td className="px-2 py-1 border text-center">
-                                <Button
-                                    size={'sm'}
-                                    onClick={() => handlePrint(value.id)}
-                                >
-                                    {loadingPrintId === value.id ? (
-                                        <Loader2 className="animate-spin" />
-                                    ) : (
-                                        <PrinterIcon />
-                                    )}
-                                </Button>
-                            </td>
                             <td className="px-2 py-1 border hidden md:table-cell">
                                 {value.user}
                             </td>

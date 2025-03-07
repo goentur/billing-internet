@@ -11,7 +11,6 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import clsx from 'clsx'
 import { Loader2, Save } from 'lucide-react'
-import { useEffect } from 'react'
 type FormDialogProps = {
     open: boolean
     setOpen: (open: boolean) => void
@@ -34,16 +33,6 @@ export default function FormDialog({
     processing,
     simpanAtauUbah,
 }: FormDialogProps) {
-    console.log(data)
-    useEffect(() => {
-        setData((prevData: any) => ({
-            ...prevData,
-            nama: data.nama || '',
-            alamat: data.alamat || '',
-            koordinat: data.koordinat || '',
-            logo: data.logo || null,
-        }))
-    }, [open]) // Jalankan setiap kali dialog dibuka
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
@@ -84,6 +73,41 @@ export default function FormDialog({
                             {errors.nama && (
                                 <div className="text-red-500 text-xs mt-0">
                                     {errors.nama}
+                                </div>
+                            )}
+                        </div>
+                        <div className="grid gap-2">
+                            <Label
+                                htmlFor="telp"
+                                className={clsx(
+                                    { 'text-red-500': errors.telp },
+                                    'capitalize'
+                                )}
+                            >
+                                telp
+                            </Label>
+                            <Input
+                                id="telp"
+                                name="telp"
+                                ref={(el) => {
+                                    if (formRefs.current) {
+                                        formRefs.current['telp'] = el
+                                    }
+                                }}
+                                type="text"
+                                value={data.telp}
+                                placeholder="Masukkan telp"
+                                onChange={(e) =>
+                                    setData((prevData: any) => ({
+                                        ...prevData,
+                                        telp: e.target.value,
+                                    }))
+                                }
+                                required
+                            />
+                            {errors.telp && (
+                                <div className="text-red-500 text-xs mt-0">
+                                    {errors.telp}
                                 </div>
                             )}
                         </div>
@@ -158,17 +182,49 @@ export default function FormDialog({
                             )}
                         </div>
                         <div className="grid gap-2">
+                            <Label
+                                htmlFor="token_wa"
+                                className={clsx(
+                                    { 'text-red-500': errors.token_wa },
+                                    'capitalize'
+                                )}
+                            >
+                                token wa
+                            </Label>
+                            <Input
+                                id="token_wa"
+                                name="token_wa"
+                                ref={(el) => {
+                                    if (formRefs.current) {
+                                        formRefs.current['token_wa'] = el
+                                    }
+                                }}
+                                type="text"
+                                value={data.token_wa}
+                                placeholder="Masukan token wa"
+                                onChange={(e) =>
+                                    setData((prevData: any) => ({
+                                        ...prevData,
+                                        token_wa: e.target.value,
+                                    }))
+                                }
+                                required
+                            />
+                            {errors.token_wa && (
+                                <div className="text-red-500 text-xs mt-0">
+                                    {errors.token_wa}
+                                </div>
+                            )}
+                        </div>
+                        <div className="grid gap-2">
                             <Label htmlFor="logo">Logo</Label>
                             <Input
                                 id="logo"
                                 accept="image/png, image/jpeg, image/jpg, image/webp"
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    const file = event.target.files?.[0] || null
+                                onChange={(e) => {
                                     setData((prevData: any) => ({
-                                        ...prevData, // Memastikan data lama tetap ada
-                                        logo: file ?? prevData.logo,
+                                        ...prevData,
+                                        logo: e.target.files?.[0] || null,
                                     }))
                                 }}
                                 type="file"

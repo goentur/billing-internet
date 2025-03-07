@@ -37,8 +37,10 @@ export default function DataTable({
                 <tr className="uppercase text-sm leading-normal">
                     <th className="p-2 border w-[1px]">NO</th>
                     <th className="p-2 border">Nama</th>
+                    <th className="p-2 border w-[1px]">Telp</th>
                     <th className="p-2 border">Alamat</th>
                     <th className="p-2 border">Koordinat</th>
+                    <th className="p-2 border">Token WA</th>
                     <th className="p-2 border w-1">Aksi</th>
                 </tr>
             </thead>
@@ -65,10 +67,10 @@ export default function DataTable({
                                 {dataInfo++}
                             </td>
                             <td className="px-2 py-1 border">{value.nama}</td>
+                            <td className="px-2 py-1 border">{value.telp}</td>
                             <td className="px-2 py-1 border">{value.alamat}</td>
-                            <td className="px-2 py-1 border">
-                                {value.koordinat}
-                            </td>
+                            <td className="px-2 py-1 border">{value.koordinat}</td>
+                            <td className="px-2 py-1 border">{value.token_wa}</td>
                             <td className="border text-center">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger className="px-2 py-1">
@@ -83,10 +85,11 @@ export default function DataTable({
                                                         setData({
                                                             id: value.id,
                                                             nama: value.nama,
+                                                            telp: value.telp,
                                                             alamat: value.alamat,
-                                                            koordinat:
-                                                                value.koordinat,
-                                                            logo: null,
+                                                            koordinat: value.koordinat,
+                                                            token_wa: value.token_wa,
+                                                            logo: '',
                                                         })
                                                 }}
                                             >

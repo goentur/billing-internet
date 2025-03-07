@@ -21,8 +21,7 @@ class PegawaiRepository
     }
     public function data($request)
     {
-        $data = $this->model::select('id', 'zona_waktu_id', 'name', 'email')
-            ->with(['zonaWaktu'])
+        $data = $this->model::with('zonaWaktu')->select('id', 'zona_waktu_id', 'name', 'email')
             ->when($request->search, $this->applySearchFilter($request))
             ->whereHas('perusahaan', fn($q) => $q->where('id', $request->perusahaan))
             ->whereHas('roles', fn($q) => $q->where('name', 'PEGAWAI'))

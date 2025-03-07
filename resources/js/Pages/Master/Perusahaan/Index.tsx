@@ -45,13 +45,7 @@ export default function Index({ gate }: indexProps) {
         delete: destroy,
         reset,
         processing,
-    } = useForm({
-        id: '',
-        nama: '',
-        alamat: '',
-        koordinat: '',
-        logo: '',
-    })
+    } = useForm()
 
     useEffect(() => {
         getData()
@@ -89,8 +83,8 @@ export default function Index({ gate }: indexProps) {
             : (route('master.perusahaan.store') as string)
 
         action(routeName, {
+            forceFormData: data.logo?true:false,
             preserveScroll: true,
-            forceFormData: true,
             onSuccess: (e) => {
                 setForm(false)
                 reset()

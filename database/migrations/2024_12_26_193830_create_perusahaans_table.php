@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('perusahaans', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama')->nullable();
+            $table->string('telp')->nullable();
             $table->string('alamat')->nullable();
             $table->string('koordinat')->nullable();
             $table->string('logo')->nullable();
+            $table->string('token_wa')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

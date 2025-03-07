@@ -92,13 +92,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         menuLaporan: [
             {
                 title: 'Pembayaran',
-                url: 'dashboard',
+                url: 'laporan.pembayaran.index',
                 icon: FileCheck2,
                 permission: 'laporan-pembayaran-index',
             },
             {
                 title: 'Piutang',
-                url: 'dashboard',
+                url: 'laporan.piutang.index',
                 icon: FileMinus2,
                 permission: 'laporan-piutang-index',
             },
@@ -127,6 +127,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 url: 'pengaturan.aplikasi.index',
                 icon: Settings,
                 permission: 'aplikasi-index',
+            },
+            {
+                title: 'Perusahaan',
+                url: 'pengaturan.perusahaan.index',
+                icon: Settings,
+                permission: 'pengaturan-perusahaan',
             },
         ],
     }

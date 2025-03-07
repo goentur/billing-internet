@@ -3,12 +3,13 @@
 namespace App\Repositories\Transaksi;
 
 use App\Enums\PembayaranStatus;
+use App\Http\Resources\Laporan\PembayaranResource as LaporanPembayaranResource;
+use App\Http\Resources\Laporan\PiutangResource;
 use App\Http\Resources\Pembayaran\CetakPembayaranResource;
 use App\Http\Resources\Pembayaran\PembayaranResource;
 use App\Jobs\SendNotificationWhatsApp;
 use App\Models\Pelanggan;
 use App\Models\Pembayaran;
-use App\Models\Perusahaan;
 use App\Support\Facades\Helpers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class PembayaranRepository
         $tanggal = $request->tanggal ?? now()->format('Y-m');
         $start = Carbon::parse($tanggal)->startOfMonth()->timestamp;
         $end = Carbon::parse($tanggal)->endOfMonth()->timestamp;
-        $transaksi = $this->model::select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status')
+        $transaksi = $this->model::with('user', 'perusahaan', 'pelanggan', 'paketInternet')->select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status')
         ->where('perusahaan_id', $request->perusahaan)
             ->whereBetween('tanggal_pembayaran', [$start, $end])
             ->when($request->search, $this->applySearchFilter($request))
@@ -99,7 +100,7 @@ class PembayaranRepository
     }
     public function cetakData($request)
     {
-        return new CetakPembayaranResource($this->model::select('id', 'user_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total')
+        return new CetakPembayaranResource($this->model::with('user', 'pelanggan', 'paketInternet')->select('id', 'user_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total')
         ->findOrFail($request->id));
     }
     public function notifikasi($pelanggan, $bulanPembayaran)
@@ -123,8 +124,37 @@ Terima kasih telah menggunakan layanan kami! 😊
 Salam,  
 *{$pelanggan->perusahaan->nama}*
 
-_pembayaran sudah termasuk pajak 11%_
+_pembayaran sudah termasuk PPN 11%_
+_untuk pengaduan, silahkan hubungi " . $pelanggan->perusahaan->telp . ". Terima kasih._
 ";
-        SendNotificationWhatsApp::dispatch($pelanggan->telp, $message)->delay(now()->addSeconds(10));
+        SendNotificationWhatsApp::dispatch($pelanggan->perusahaan->token_wa, $pelanggan->telp, $message)->delay(now()->addSeconds(10));
+    }
+
+    public function pembayaran($request)
+    {
+        $tanggal = $request->tanggal ?? now()->format('Y-m');
+        $start = Carbon::parse($tanggal)->startOfMonth()->timestamp;
+        $end = Carbon::parse($tanggal)->endOfMonth()->timestamp;
+        $transaksi = $this->model::with('user', 'perusahaan', 'pelanggan', 'paketInternet')->select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status')
+            ->where('perusahaan_id', $request->perusahaan)
+            ->whereBetween('tanggal_pembayaran', [$start, $end])
+            ->latest()
+            ->paginate($request->perPage ?? 25);
+        $result = LaporanPembayaranResource::collection($transaksi)->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
+    }
+    public function piutang($request)
+    {
+        $pembayaran = Pelanggan::with('paketInternet')->where('perusahaan_id', $request->perusahaan)->whereDoesntHave('pembayaran', function ($query) use ($request) {
+            $tanggal = $request->tanggal ?? now()->format('Y-m');
+            $start = Carbon::parse($tanggal)->startOfMonth()->timestamp;
+            $end = Carbon::parse($tanggal)->endOfMonth()->timestamp;
+            $query
+                ->whereBetween('tanggal_pembayaran', [$start, $end]);
+        })
+            ->latest()
+            ->paginate($request->perPage ?? 25);
+        $result = PiutangResource::collection($pembayaran)->response()->getData(true);
+        return $result['meta'] + ['data' => $result['data']];
     }
 }

@@ -60,7 +60,7 @@ export default function NotaThermal({
                             <div className="text-center flex-auto">
                                 <img
                                     src={perusahaan.logo}
-                                    alt="Logo Perusahaan"
+                                    alt=""
                                     className="w-1/4 mx-auto"
                                 />
                                 <p className="font-semibold">
@@ -75,7 +75,7 @@ export default function NotaThermal({
                                             colSpan={3}
                                             className="text-center m-0 p-0"
                                         >
-                                            ---------------------------------------------
+                                            ----------------------------------------
                                         </td>
                                     </tr>
                                     <tr>
@@ -99,7 +99,7 @@ export default function NotaThermal({
                                     </tr>
                                     <tr>
                                         <td colSpan={3} className="text-center">
-                                            ---------------------------------------------
+                                            ----------------------------------------
                                         </td>
                                     </tr>
                                 </tbody>
@@ -125,16 +125,12 @@ export default function NotaThermal({
                                                 '-'}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr className="font-bold">
                                         <td className="align-top font-bold">
-                                            KETENGAN
+                                            PAKET
                                         </td>
                                         <td className="align-top">:</td>
-                                        <td>
-                                            Bayar internet untuk bulan{' '}
-                                            {dataPrint?.tanggal_pembayaran ??
-                                                '-'}
-                                        </td>
+                                        <td>{dataPrint?.paket_internet ?? 0}</td>
                                     </tr>
                                     <tr className="font-bold">
                                         <td className="align-top font-bold">
@@ -144,13 +140,19 @@ export default function NotaThermal({
                                         <td>{dataPrint?.total ?? 0}</td>
                                     </tr>
                                     <tr>
-                                        <td colSpan={3}>
-                                            <br />
+                                        <td className="align-top font-bold">
+                                            KETERANGAN
+                                        </td>
+                                        <td className="align-top">:</td>
+                                        <td>
+                                            Bayar internet untuk bulan{' '}
+                                            {dataPrint?.tanggal_pembayaran ??
+                                                '-'}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colSpan={3} className="text-center">
-                                            TERIMAKASIH
+                                        <td colSpan={3}>
+                                            <br />
                                         </td>
                                     </tr>
                                     <tr>
@@ -158,7 +160,14 @@ export default function NotaThermal({
                                             colSpan={3}
                                             className="italic text-[10px]"
                                         >
-                                            * Pembayaran sudah termasuk PPN 11%
+                                            pembayaran sudah termasuk PPN 11%
+                                            <br className='m-0 p-0' />
+                                            untuk pengaduan, silahkan hubungi {perusahaan.telp}.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={3} className="text-center">
+                                            TERIMAKASIH
                                         </td>
                                     </tr>
                                     <tr>
@@ -171,7 +180,7 @@ export default function NotaThermal({
                                             colSpan={3}
                                             className="text-center m-0 p-0"
                                         >
-                                            ---------------------------------------------
+                                            ----------------------------------------
                                         </td>
                                     </tr>
                                 </tbody>
