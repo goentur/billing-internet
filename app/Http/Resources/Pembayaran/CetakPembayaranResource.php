@@ -22,14 +22,14 @@ class CetakPembayaranResource extends JsonResource
         return [
             'user' => $this->when(!blank($this->user), Memo::for10min('user-' . $this->user_id, fn() => $this->user->name)),
             'pelanggan' => $this->when(!blank($this->pelanggan), function () {
-                return Memo::forDay('cetak-pelanggan-' . $this->pelanggan_id, function () {
+                return Memo::for10min('pelanggan-' . $this->pelanggan_id, function () {
                     return [
                         'nama' => $this->pelanggan->nama,
                         'alamat' => $this->pelanggan->alamat,
                     ];
                 });
             }),
-            'paket_internet' => $this->when(!blank($this->paketInternet), Memo::for10min('paket-internet-' . $this->paket_internet_id, fn() => $this->paketInternet->nama)),
+            'paket_internet' => $this->when(!blank($this->paketInternet), Memo::for10min('pembayaran-paket-internet-' . $this->paket_internet_id, fn() => $this->paketInternet->nama)),
             'tanggal_pembayaran' => $this->convertToTimezone($this->tanggal_pembayaran, $timezone, 'M Y'),
             'tanggal_transaksi' => $this->convertToTimezone($this->tanggal_transaksi, $timezone, 'Y-m-d H:i:s'),
             'total' => Helpers::ribuan($this->total),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Laporan;
 
+use App\Support\Facades\Memo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
