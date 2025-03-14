@@ -29,15 +29,31 @@ class PembayaranRepository
             ->orWhereHas('paketInternet', fn($q) => $q->where('nama', 'like', "%{$request->search}%"));
         });
     }
-    public function data($request)
+    public function queryPembayaran($request)
     {
         $tanggal = $request->tanggal ?? now()->format('Y-m');
         $start = Carbon::parse($tanggal)->startOfMonth()->timestamp;
         $end = Carbon::parse($tanggal)->endOfMonth()->timestamp;
-        $transaksi = $this->model::with('user', 'perusahaan', 'pelanggan', 'paketInternet')->select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status')
-        ->where('perusahaan_id', $request->perusahaan)
-            ->whereBetween('tanggal_pembayaran', [$start, $end])
-            ->when($request->search, $this->applySearchFilter($request))
+        return $this->model::with('user', 'perusahaan', 'pelanggan', 'paketInternet')->select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status')
+            ->where('perusahaan_id', $request->perusahaan)
+            ->whereBetween('tanggal_pembayaran', [$start, $end]);
+    }
+    public function queryPiutang($request)
+    {
+        $tanggal = $request->tanggal ?? now()->format('Y-m');
+        $start = Carbon::parse($tanggal)->startOfMonth()->timestamp;
+        $end = Carbon::parse($tanggal)->endOfMonth()->timestamp;
+        return Pelanggan::with('paketInternet')
+            ->where('perusahaan_id', $request->perusahaan)
+            ->whereNotIn('id', function ($query) use ($start, $end) {
+                $query->select('pelanggan_id')
+                    ->from('pembayarans')
+                    ->whereBetween('tanggal_pembayaran', [$start, $end]);
+            });
+    }
+    public function data($request)
+    {
+        $transaksi = $this->queryPembayaran($request)->when($request->search, $this->applySearchFilter($request))
             ->latest()
             ->paginate($request->perPage ?? 25);
         $result = PembayaranResource::collection($transaksi)->response()->getData(true);
@@ -127,17 +143,11 @@ Salam,
 _pembayaran sudah termasuk PPN 11%_
 _untuk pengaduan, silahkan hubungi " . $pelanggan->perusahaan->telp . ". Terima kasih._
 ";
-        // SendNotificationWhatsApp::dispatch($pelanggan->perusahaan->token_wa, $pelanggan->telp, $message)->delay(now()->addSeconds(10));
+        SendNotificationWhatsApp::dispatch($pelanggan->perusahaan->token_wa, $pelanggan->telp, $message)->delay(now()->addSeconds(10));
     }
     public function pembayaran($request)
     {
-        $tanggal = $request->tanggal ?? now()->format('Y-m');
-        $start = Carbon::parse($tanggal)->startOfMonth()->timestamp;
-        $end = Carbon::parse($tanggal)->endOfMonth()->timestamp;
-        $transaksi = $this->model::with('user', 'perusahaan', 'pelanggan', 'paketInternet')->select('id', 'user_id', 'perusahaan_id', 'pelanggan_id', 'paket_internet_id', 'tanggal_pembayaran', 'tanggal_transaksi', 'total', 'status')
-            ->where('perusahaan_id', $request->perusahaan)
-            ->whereBetween('tanggal_pembayaran', [$start, $end])
-            ->when($request->search, $this->applySearchFilter($request))
+        $transaksi = $this->queryPembayaran($request)->when($request->search, $this->applySearchFilter($request))
             ->latest()
             ->paginate($request->perPage ?? 25);
         $result = LaporanPembayaranResource::collection($transaksi)->response()->getData(true);
@@ -145,16 +155,7 @@ _untuk pengaduan, silahkan hubungi " . $pelanggan->perusahaan->telp . ". Terima 
     }
     public function piutang($request)
     {
-        $tanggal = $request->tanggal ?? now()->format('Y-m');
-        $start = Carbon::parse($tanggal)->startOfMonth()->timestamp;
-        $end = Carbon::parse($tanggal)->endOfMonth()->timestamp;
-        $pembayaran = Pelanggan::with('paketInternet')
-            ->where('perusahaan_id', $request->perusahaan)
-            ->whereNotIn('id', function ($query) use ($start, $end) {
-                $query->select('pelanggan_id')
-                    ->from('pembayarans')
-                    ->whereBetween('tanggal_pembayaran', [$start, $end]);
-            });
+        $pembayaran = $this->queryPiutang($request);
         if ($request->search) {
             $pembayaran->where(function ($q) use ($request) {
                 $q->where('nama', 'like', "%{$request->search}%")
@@ -162,9 +163,9 @@ _untuk pengaduan, silahkan hubungi " . $pelanggan->perusahaan->telp . ". Terima 
                     ->orWhereHas('paketInternet', fn($query) => $query->where('nama', 'like', "%{$request->search}%"));
             });
         }
-        $pppp = $pembayaran->latest()
+        $piutang = $pembayaran->latest()
             ->paginate($request->perPage ?? 25);
-        $result = PiutangResource::collection($pppp)->response()->getData(true);
+        $result = PiutangResource::collection($piutang)->response()->getData(true);
         return $result['meta'] + ['data' => $result['data']];
     }
 }

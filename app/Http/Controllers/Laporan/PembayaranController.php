@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Laporan;
 
+use App\Exports\Transaksi\PembayaranExportExcel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Laporan\DataPembayaran;
+use App\Http\Requests\Laporan\ExportRequest;
 use App\Repositories\Transaksi\PembayaranRepository;
 use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PembayaranController extends Controller implements HasMiddleware
 {
@@ -49,5 +52,10 @@ class PembayaranController extends Controller implements HasMiddleware
     public function data(DataPembayaran $request)
     {
         return response()->json($this->repository->pembayaran($request));
+    }
+
+    public function exportExcel(ExportRequest $request)
+    {
+        return (new PembayaranExportExcel($this->repository, $request))->download('laporan-pembayaran.xlsx');
     }
 }

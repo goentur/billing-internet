@@ -8,18 +8,30 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/Components/ui/select'
-import { Printer } from 'lucide-react'
+import { Download } from 'lucide-react'
 
+interface DataInfo {
+    from: number
+    to: number
+    totalRecords: number
+    currentPage: number
+    search: string
+    tanggal: string
+}
 type PaginationSearchFormProps = {
     gate: {
         print: boolean
     }
+    perusahaan: string
+    dataInfo: DataInfo
     tanggal: string | null
     setDataInfo: React.Dispatch<React.SetStateAction<any>>
 }
 
 export default function PaginationSearchForm({
     gate,
+    perusahaan,
+    dataInfo,
     tanggal,
     setDataInfo,
 }: PaginationSearchFormProps) {
@@ -78,11 +90,15 @@ export default function PaginationSearchForm({
                         <Button
                             type="button"
                             variant="destructive"
-                            // onClick={() => {
-                            //     reset(), setForm(true)
-                            // }}
+                            onClick={() => {
+                                const url = route("laporan.piutang.export-excel", { 
+                                    perusahaan: perusahaan,
+                                    tanggal: dataInfo.tanggal,
+                                });
+                                window.open(url, "_blank");
+                            }}
                         >
-                            <Printer /> Cetak
+                                <Download /> Excel
                         </Button>
                     )}
                 </form>

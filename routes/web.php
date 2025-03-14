@@ -101,19 +101,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
     Route::prefix('laporan')->name('laporan.')->group(function () {
-        Route::prefix('pembayaran')->name('pembayaran.')->group(function () {
+        Route::prefix('pembayaran')->name('pembayaran.')->controller(LaporanPembayaranController::class)->group(function () {
             Route::middleware('can:laporan-pembayaran-index')->group(function () {
-                Route::get('/', [LaporanPembayaranController::class, 'index'])->name('index');
-                Route::post('data', [LaporanPembayaranController::class, 'data'])->name('data');
+                Route::get('/', 'index')->name('index');
+                Route::post('data', 'data')->name('data');
             });
-            Route::middleware('can:laporan-pembayaran-print')->get('print', [LaporanPembayaranController::class, 'print'])->name('print');
+            Route::middleware('can:laporan-pembayaran-print')->get('export-excel', 'exportExcel')->name('export-excel');
         });
-        Route::prefix('piutang')->name('piutang.')->group(function () {
+        Route::prefix('piutang')->name('piutang.')->controller(PiutangController::class)->group(function () {
             Route::middleware('can:laporan-piutang-index')->group(function () {
-                Route::get('/', [PiutangController::class, 'index'])->name('index');
-                Route::post('data', [PiutangController::class, 'data'])->name('data');
+                Route::get('/', 'index')->name('index');
+                Route::post('data', 'data')->name('data');
             });
-            Route::middleware('can:laporan-piutang-print')->get('print', [PiutangController::class, 'print'])->name('print');
+            Route::middleware('can:laporan-piutang-print')->get('export-excel', 'exportExcel')->name('export-excel');
         });
     });
 });

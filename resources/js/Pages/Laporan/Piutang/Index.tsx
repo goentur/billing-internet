@@ -24,8 +24,8 @@ export default function Index({ gate }: indexProps) {
         to: 1,
         totalRecords: 0,
         perPage: 25,
-        search: null,
-        tanggal: null,
+        search: '',
+        tanggal: '',
     })
     useEffect(() => {
         getData()
@@ -76,6 +76,8 @@ export default function Index({ gate }: indexProps) {
                 <CardContent>
                     <PaginationSearchForm
                         gate={gate}
+                        perusahaan={perusahaan.id}
+                        dataInfo={dataInfo}
                         tanggal={dataInfo.tanggal}
                         setDataInfo={setDataInfo}
                     />

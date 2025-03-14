@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Laporan;
 
+use App\Exports\Transaksi\PiutangExportExcel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Laporan\DataPiutang;
+use App\Http\Requests\Laporan\ExportRequest;
 use App\Repositories\Transaksi\PembayaranRepository;
 use App\Support\Facades\Memo;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -49,5 +51,10 @@ class PiutangController extends Controller implements HasMiddleware
     public function data(DataPiutang $request)
     {
         return response()->json($this->repository->piutang($request));
+    }
+
+    public function exportExcel(ExportRequest $request)
+    {
+        return (new PiutangExportExcel($this->repository, $request))->download('laporan-piutang.xlsx');
     }
 }
