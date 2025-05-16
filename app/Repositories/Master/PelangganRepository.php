@@ -3,10 +3,10 @@
 namespace App\Repositories\Master;
 
 use App\Http\Resources\Common\LabelValueResource;
+use App\Http\Resources\Pelanggan\ApiPelangganResource;
 use App\Http\Resources\Pelanggan\PelangganResource;
 use App\Http\Resources\Pembayaran\PembayaranResource;
 use App\Models\Pelanggan;
-use App\Models\Pembayaran;
 use Carbon\Carbon;
 
 class PelangganRepository
@@ -16,6 +16,16 @@ class PelangganRepository
     public function allData($request)
     {
         return LabelValueResource::collection($this->model::select('id', 'nama', 'alamat')->where('perusahaan_id', $request->perusahaan)->get());
+    }
+
+    public function dataApi($request)
+    {
+        $query = $this->model::select('id', 'nama', 'alamat');
+        if ($request->search) {
+            $query->where('nama', 'like', '%' . $request->search . '%')
+                ->orWhere('alamat', 'like', '%' . $request->search . '%');
+        }
+        return ApiPelangganResource::collection($query->limit(8)->get());
     }
 
     public function data($request)
